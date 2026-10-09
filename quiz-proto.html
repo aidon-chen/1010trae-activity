@@ -1,0 +1,1289 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4B3FE3">
+  <link rel="icon" href="data:,">
+  <title>国产 AI 圈梗快问快答 · 原型</title>
+  <style>
+    /* ---------- TraeWork 设计系统核心变量 ---------- */
+    :root {
+      color-scheme: light;
+      --bg-base-default: #FFFFFF;
+      --bg-base-secondary: #F5F5F5;
+      --bg-brand: #4B3FE3;
+      --bg-brand-hover: #3F33CC;
+      --bg-brand-active: #352AAE;
+      --text-default: #171717;
+      --text-secondary: #404040;
+      --text-tertiary: #737373;
+      --text-onbrand: #FFFFFF;
+      --text-brand: #4B3FE3;
+      --border-neutral-l1: rgba(115, 115, 115, 0.12);
+      --border-neutral-l2: rgba(115, 115, 115, 0.24);
+      --border-brand: #4B3FE3;
+      --status-success-default: #0F9960;
+      --status-success-surface-l1: rgba(15, 153, 96, 0.08);
+      --status-error-default: #D9363F;
+      --status-error-surface-l1: rgba(217, 54, 63, 0.08);
+      --status-warning-default: #C57410;
+      --radius-4: 4px;
+      --radius-8: 8px;
+      --radius-12: 12px;
+      --radius-16: 16px;
+      --radius-20: 20px;
+      --radius-24: 24px;
+      --radius-full: 9999px;
+      --spacer-4: 4px;
+      --spacer-8: 8px;
+      --spacer-12: 12px;
+      --spacer-16: 16px;
+      --spacer-20: 20px;
+      --spacer-24: 24px;
+      --spacer-32: 32px;
+      --spacer-40: 40px;
+      --spacer-48: 48px;
+      --font-family-default: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      --body-base-font-size: 14px;
+      --body-base-line-height: 20px;
+      --body-lg-font-size: 16px;
+      --body-lg-line-height: 24px;
+      --heading-sm-font-size: 16px;
+      --heading-sm-line-height: 24px;
+      --heading-sm-font-weight: 600;
+      --heading-md-font-size: 20px;
+      --heading-md-line-height: 28px;
+      --heading-md-font-weight: 600;
+      --heading-lg-font-size: 24px;
+      --heading-lg-line-height: 32px;
+      --heading-lg-font-weight: 600;
+      --heading-xl-font-size: 32px;
+      --heading-xl-line-height: 40px;
+      --heading-xl-font-weight: 700;
+      --shadow-sm: 0 1px 2px rgba(23, 23, 23, 0.04);
+      --shadow-md: 0 4px 12px rgba(23, 23, 23, 0.06);
+      --shadow-lg: 0 8px 24px rgba(75, 63, 227, 0.12);
+      --shadow-brand: 0 4px 16px rgba(75, 63, 227, 0.25);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text-default);
+      font-family: var(--font-family-default);
+      font-size: var(--body-base-font-size);
+      line-height: var(--body-base-line-height);
+      background: var(--bg-base-default);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+    button:disabled { cursor: default; }
+    button:focus-visible, a:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--bg-brand);
+      outline-offset: 2px;
+    }
+
+    /* ---------- 品牌背景氛围 ---------- */
+    .bg-atmosphere {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 40%, #FFFFFF 100%);
+    }
+    .bg-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.5;
+    }
+    .bg-blob-1 {
+      width: 400px; height: 400px;
+      top: -150px; left: -100px;
+      background: rgba(75, 63, 227, 0.18);
+    }
+    .bg-blob-2 {
+      width: 300px; height: 300px;
+      top: 100px; right: -80px;
+      background: rgba(139, 92, 246, 0.15);
+    }
+    .bg-blob-3 {
+      width: 350px; height: 350px;
+      bottom: -120px; left: 30%;
+      background: rgba(99, 102, 241, 0.1);
+    }
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(75, 63, 227, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(75, 63, 227, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse at top, #000 30%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at top, #000 30%, transparent 70%);
+    }
+
+    /* ---------- 主容器 ---------- */
+    .shell {
+      width: min(960px, 100%);
+      margin: 0 auto;
+      padding: var(--spacer-40) var(--spacer-24) var(--spacer-32);
+    }
+
+    /* ---------- 顶部品牌区 ---------- */
+    .brand-header {
+      text-align: center;
+      margin-bottom: var(--spacer-32);
+    }
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacer-8);
+      padding: 6px 14px;
+      background: rgba(75, 63, 227, 0.08);
+      border: 1px solid rgba(75, 63, 227, 0.15);
+      border-radius: var(--radius-full);
+      color: var(--text-brand);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      margin-bottom: var(--spacer-16);
+    }
+    .brand-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--bg-brand);
+      box-shadow: 0 0 8px rgba(75, 63, 227, 0.5);
+    }
+    .brand-title {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #171717 0%, #4B3FE3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .brand-subtitle {
+      margin: var(--spacer-12) 0 0;
+      color: var(--text-secondary);
+      font-size: var(--body-lg-font-size);
+      line-height: var(--body-lg-line-height);
+    }
+
+    /* ---------- 状态栏 ---------- */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--spacer-16);
+      margin-bottom: var(--spacer-20);
+      padding: var(--spacer-12) var(--spacer-16);
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-neutral-l1);
+      border-radius: var(--radius-16);
+      box-shadow: var(--shadow-sm);
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacer-8);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .status-item strong {
+      color: var(--text-default);
+      font-weight: 600;
+    }
+    .status-divider {
+      width: 1px; height: 20px;
+      background: var(--border-neutral-l1);
+    }
+    .status-spacer { flex: 1; }
+
+    /* 进度胶囊 */
+    .progress-pill {
+      display: flex;
+      align-items: center;
+      gap: var(--spacer-8);
+      min-width: 140px;
+    }
+    .progress-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .progress-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border-neutral-l2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .progress-dot.active {
+      background: var(--bg-brand);
+      box-shadow: 0 0 0 3px rgba(75, 63, 227, 0.15);
+      transform: scale(1.2);
+    }
+    .progress-dot.done {
+      background: var(--status-success-default);
+    }
+
+    /* ---------- 答题卡片 ---------- */
+    .quiz-card {
+      position: relative;
+      background: var(--bg-base-default);
+      border: 1px solid var(--border-neutral-l1);
+      border-radius: var(--radius-24);
+      padding: var(--spacer-40) var(--spacer-32);
+      box-shadow: 0 20px 60px -20px rgba(75, 63, 227, 0.15), var(--shadow-sm);
+      overflow: hidden;
+    }
+    /* 卡片顶部装饰条 */
+    .quiz-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #4B3FE3 0%, #8B5CF6 50%, #4B3FE3 100%);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* 题目元信息 */
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--spacer-16);
+      margin-bottom: var(--spacer-24);
+    }
+    .category-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(75, 63, 227, 0.06);
+      border: 1px solid rgba(75, 63, 227, 0.1);
+      border-radius: var(--radius-full);
+      color: var(--text-brand);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .category-tag::before {
+      content: '';
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* 计时器 */
+    .timer {
+      position: relative;
+      width: 56px; height: 56px;
+      flex-shrink: 0;
+    }
+    .timer svg {
+      width: 56px; height: 56px;
+      transform: rotate(-90deg);
+    }
+    .timer circle {
+      fill: none;
+      stroke-width: 3;
+    }
+    .timer-track {
+      stroke: var(--border-neutral-l1);
+    }
+    .timer-ring {
+      stroke: var(--bg-brand);
+      stroke-linecap: round;
+      stroke-dasharray: 144.513;
+      transition: stroke 0.3s;
+    }
+    .timer-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-default);
+      font-variant-numeric: tabular-nums;
+    }
+    .timer-label small {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      margin-left: 2px;
+    }
+    .timer.ending .timer-ring {
+      stroke: var(--status-warning-default);
+    }
+    .timer.ending .timer-label {
+      color: var(--status-warning-default);
+      animation: pulse 0.5s ease-in-out infinite alternate;
+    }
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.08); }
+    }
+    .timer.expired .timer-ring {
+      stroke: var(--status-error-default);
+    }
+    .timer.expired .timer-label {
+      color: var(--status-error-default);
+    }
+
+    /* 题目 */
+    .question-text {
+      margin: 0;
+      font-size: clamp(22px, 3.5vw, 32px);
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: var(--text-default);
+      text-wrap: balance;
+      overflow-wrap: anywhere;
+      min-height: 5.6em;
+    }
+
+    /* 欢迎页介绍 */
+    .intro-block {
+      margin-top: var(--spacer-24);
+      padding: var(--spacer-20);
+      background: var(--bg-base-secondary);
+      border-radius: var(--radius-16);
+      border: 1px solid var(--border-neutral-l1);
+    }
+    .intro-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .intro-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacer-12);
+      padding: 8px 0;
+      color: var(--text-secondary);
+      font-size: var(--body-base-font-size);
+      line-height: 1.6;
+    }
+    .intro-list li b {
+      color: var(--text-default);
+      font-weight: 600;
+    }
+    .intro-icon {
+      flex-shrink: 0;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(75, 63, 227, 0.1);
+      color: var(--bg-brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* ---------- 选项 ---------- */
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacer-12);
+      margin-top: var(--spacer-32);
+    }
+    .choice {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--spacer-12);
+      padding: var(--spacer-16) var(--spacer-20);
+      background: var(--bg-base-default);
+      border: 2px solid var(--border-neutral-l1);
+      border-radius: var(--radius-16);
+      color: var(--text-default);
+      text-align: left;
+      font-size: var(--body-lg-font-size);
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .choice:not(:disabled):hover {
+      border-color: var(--bg-brand);
+      background: rgba(75, 63, 227, 0.02);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -8px rgba(75, 63, 227, 0.2);
+    }
+    .choice:not(:disabled):active {
+      transform: translateY(0);
+    }
+    .choice.selected {
+      border-color: var(--bg-brand);
+      background: rgba(75, 63, 227, 0.04);
+    }
+    .choice.correct {
+      border-color: var(--status-success-default);
+      background: var(--status-success-surface-l1);
+      color: var(--status-success-default);
+    }
+    .choice.correct .choice-letter {
+      background: var(--status-success-default);
+      color: #fff;
+    }
+    .choice.wrong {
+      border-color: var(--status-error-default);
+      background: var(--status-error-surface-l1);
+      color: var(--status-error-default);
+    }
+    .choice.wrong .choice-letter {
+      background: var(--status-error-default);
+      color: #fff;
+    }
+    .choice:disabled {
+      opacity: 0.7;
+    }
+    .choice-letter {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: var(--radius-8);
+      background: var(--bg-base-secondary);
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .choice:not(:disabled):hover .choice-letter {
+      background: rgba(75, 63, 227, 0.1);
+      color: var(--bg-brand);
+    }
+
+    /* ---------- 反馈区 ---------- */
+    .feedback {
+      margin-top: var(--spacer-24);
+      padding: var(--spacer-16) var(--spacer-20);
+      background: var(--bg-base-secondary);
+      border-radius: var(--radius-12);
+      border-left: 3px solid var(--bg-brand);
+      line-height: 1.7;
+      font-size: var(--body-base-font-size);
+      color: var(--text-secondary);
+    }
+    .feedback strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text-default);
+      font-size: var(--body-lg-font-size);
+      font-weight: 600;
+    }
+    .feedback a {
+      color: var(--text-brand);
+      font-size: 12px;
+      text-underline-offset: 3px;
+    }
+
+    /* ---------- 底部操作区 ---------- */
+    .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--spacer-24);
+      margin-top: var(--spacer-32);
+      padding-top: var(--spacer-24);
+      border-top: 1px solid var(--border-neutral-l1);
+    }
+    .tip {
+      margin: 0;
+      color: var(--text-tertiary);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* 主按钮 */
+    .btn-primary {
+      position: relative;
+      min-height: 48px;
+      padding: 0 28px;
+      color: #fff;
+      background: linear-gradient(135deg, #4B3FE3 0%, #6366F1 100%);
+      border: none;
+      border-radius: var(--radius-12);
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: var(--shadow-brand);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .btn-primary:not(:disabled):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(75, 63, 227, 0.35);
+    }
+    .btn-primary:not(:disabled):hover::before {
+      left: 100%;
+    }
+    .btn-primary:not(:disabled):active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(75, 63, 227, 0.3);
+    }
+    .btn-primary:disabled {
+      opacity: 0.4;
+      box-shadow: none;
+    }
+
+    /* 次按钮 */
+    .btn-secondary {
+      min-height: 40px;
+      padding: 0 16px;
+      background: var(--bg-base-default);
+      border: 1px solid var(--border-neutral-l2);
+      border-radius: var(--radius-10);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--bg-brand);
+      color: var(--text-brand);
+      background: rgba(75, 63, 227, 0.04);
+    }
+
+    /* 工具栏 */
+    .toolbar {
+      display: flex;
+      gap: var(--spacer-8);
+      align-items: center;
+    }
+    .toolbar .btn-secondary {
+      min-height: 36px;
+      padding: 0 14px;
+      font-size: 12px;
+      border-radius: var(--radius-8);
+    }
+
+    /* ---------- 结果页 ---------- */
+    .result-score {
+      text-align: center;
+      padding: var(--spacer-32) 0 var(--spacer-24);
+    }
+    .score-number {
+      font-size: clamp(64px, 10vw, 96px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #4B3FE3 0%, #8B5CF6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .score-number small {
+      font-size: 0.3em;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      -webkit-text-fill-color: var(--text-tertiary);
+    }
+    .result-title {
+      margin: var(--spacer-16) 0 0;
+      font-size: var(--heading-lg-font-size);
+      font-weight: 600;
+      color: var(--text-default);
+    }
+    .result-subtitle {
+      margin: var(--spacer-8) 0 0;
+      color: var(--text-secondary);
+      font-size: var(--body-lg-font-size);
+    }
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: var(--spacer-16);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .result-badge.success {
+      background: var(--status-success-surface-l1);
+      color: var(--status-success-default);
+    }
+    .result-badge.fail {
+      background: var(--status-error-surface-l1);
+      color: var(--status-error-default);
+    }
+
+    /* 答题回顾 */
+    .review {
+      margin: var(--spacer-24) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .review li {
+      padding: var(--spacer-16);
+      margin-bottom: var(--spacer-8);
+      background: var(--bg-base-secondary);
+      border-radius: var(--radius-12);
+      border: 1px solid var(--border-neutral-l1);
+      line-height: 1.7;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .review li b {
+      display: flex;
+      align-items: center;
+      gap: var(--spacer-8);
+      color: var(--text-default);
+      font-weight: 600;
+      font-size: var(--body-base-font-size);
+      margin-bottom: 4px;
+    }
+    .review-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .review-status.correct {
+      background: var(--status-success-surface-l1);
+      color: var(--status-success-default);
+    }
+    .review-status.wrong {
+      background: var(--status-error-surface-l1);
+      color: var(--status-error-default);
+    }
+    .review a {
+      color: var(--text-brand);
+      font-size: 12px;
+      text-underline-offset: 3px;
+    }
+
+    /* ---------- 来源区 ---------- */
+    .sources {
+      margin-top: var(--spacer-32);
+      padding: var(--spacer-20);
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-neutral-l1);
+      border-radius: var(--radius-16);
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    .sources summary {
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-default);
+      list-style: none;
+    }
+    .sources summary::-webkit-details-marker { display: none; }
+    .sources summary::before {
+      content: '+';
+      display: inline-block;
+      width: 18px;
+      color: var(--text-brand);
+      font-weight: 600;
+    }
+    .sources[open] summary::before { content: '−'; }
+    .sources p { line-height: 1.8; margin: var(--spacer-12) 0 0; }
+    .source-list {
+      padding: 0;
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacer-12) var(--spacer-24);
+      margin-top: var(--spacer-16);
+    }
+    .source-list li {
+      padding: var(--spacer-12) 0;
+      border-bottom: 1px solid var(--border-neutral-l1);
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+    .source-list strong {
+      color: var(--text-default);
+      font-weight: 600;
+      font-size: var(--body-base-font-size);
+    }
+    .source-list small {
+      display: block;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      margin: 2px 0;
+    }
+    .source-list a {
+      color: var(--text-brand);
+      font-size: 12px;
+      text-underline-offset: 3px;
+    }
+
+    /* ---------- 通知条 ---------- */
+    .notice {
+      min-height: 20px;
+      margin: var(--spacer-16) 0;
+      font-size: 12px;
+      text-align: center;
+      color: var(--text-tertiary);
+    }
+
+    /* ---------- 页脚 ---------- */
+    footer {
+      margin-top: var(--spacer-32);
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 11px;
+    }
+
+    /* ---------- 全屏模式 ---------- */
+    .shell:fullscreen,
+    .screen-mode {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+      overflow: auto;
+      padding: var(--spacer-40) max(20px, calc((100vw - 780px) / 2));
+    }
+    .screen-mode {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      background: var(--bg-base-default);
+    }
+    .shell:fullscreen .sources,
+    .shell:fullscreen footer,
+    .screen-mode .sources,
+    .screen-mode footer { display: none; }
+
+    /* ---------- 响应式 ---------- */
+    @media (max-width: 640px) {
+      .shell { padding: var(--spacer-24) var(--spacer-16) var(--spacer-20); }
+      .brand-title { font-size: 28px; }
+      .brand-subtitle { font-size: 14px; }
+      .quiz-card {
+        padding: var(--spacer-24) var(--spacer-20);
+        border-radius: var(--radius-20);
+      }
+      .question-text { font-size: 22px; }
+      .options {
+        grid-template-columns: 1fr;
+        gap: var(--spacer-10);
+        margin-top: var(--spacer-24);
+      }
+      .choice {
+        padding: var(--spacer-14) var(--spacer-16);
+        font-size: var(--body-base-font-size);
+        min-height: 56px;
+        border-radius: var(--radius-12);
+      }
+      .choice-letter {
+        width: 28px; height: 28px;
+        font-size: 12px;
+      }
+      .bottom {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacer-16);
+      }
+      .btn-primary {
+        width: 100%;
+        min-height: 48px;
+      }
+      .score-number { font-size: 64px; }
+      .source-list { grid-template-columns: 1fr; }
+      .status-bar {
+        flex-wrap: wrap;
+        gap: var(--spacer-12);
+      }
+      .status-divider { display: none; }
+      .progress-pill { order: -1; width: 100%; }
+      .shell:fullscreen, .screen-mode {
+        padding: var(--spacer-24) var(--spacer-16);
+      }
+    }
+
+    /* ---------- 动画偏好 ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+
+    [hidden] { display: none !important; }
+
+    /* 入场动画 */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .question-text, .options, .result-score {
+      animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body>
+
+<!-- 品牌背景氛围 -->
+<div class="bg-atmosphere" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="bg-blob bg-blob-1"></div>
+  <div class="bg-blob bg-blob-2"></div>
+  <div class="bg-blob bg-blob-3"></div>
+</div>
+
+<main class="shell" id="sheet">
+  <!-- 顶部品牌区 -->
+  <header class="brand-header">
+    <div class="brand-badge"><span class="dot"></span>校园 AI 活动 · 圈梗挑战</div>
+    <h1 class="brand-title">国产 AI 圈梗快问快答</h1>
+    <p class="brand-subtitle">5 秒一题，连续答对 5 题过关</p>
+  </header>
+
+  <!-- 状态栏 -->
+  <div class="status-bar">
+    <div class="progress-pill">
+      <div class="progress-dots" id="progress-dots" aria-hidden="true">
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+      </div>
+      <span class="status-item" id="progress">每轮 <strong>5</strong> 题</span>
+    </div>
+    <div class="status-divider"></div>
+    <span class="status-item" id="count">已答对 <strong>0</strong> 题</span>
+    <div class="status-spacer"></div>
+    <div class="toolbar">
+      <button class="btn-secondary" id="shuffle" type="button">换一组</button>
+      <button class="btn-secondary" id="restart" type="button">重新开始</button>
+      <button class="btn-secondary" id="fullscreen" type="button" aria-pressed="false">全屏</button>
+    </div>
+  </div>
+
+  <!-- 答题卡片 -->
+  <section class="quiz-card" aria-label="快问快答">
+    <div class="question-meta">
+      <span class="category-tag" id="category">国产产品梗 × 中文用户梗</span>
+      <div class="timer" id="timer" role="timer" aria-live="off" aria-label="剩余5秒" hidden>
+        <svg viewBox="0 0 56 56" aria-hidden="true">
+          <circle class="timer-track" cx="28" cy="28" r="23"/>
+          <circle class="timer-ring" id="timer-ring" cx="28" cy="28" r="23"/>
+        </svg>
+        <span class="timer-label" aria-hidden="true">
+          <span id="timer-number">5</span><small>秒</small>
+        </span>
+      </div>
+    </div>
+
+    <h2 class="question-text" id="question">今天这些 AI 圈梗，<br>你能认出几个？</h2>
+
+    <div class="intro-block" id="intro">
+      <ul class="intro-list">
+        <li><span class="intro-icon">1</span>每轮随机 <b>5 题</b>，每题限时 <b>5 秒</b></li>
+        <li><span class="intro-icon">2</span>答对直接进入下一题；<b>答错或超时，本轮立即结束</b></li>
+        <li><span class="intro-icon">3</span>连续答对 <b>全部 5 题</b>，由工作人员核验 <b>1 次抽奖机会</b></li>
+        <li><span class="intro-icon">★</span>产品昵称、中文口癖与社区表达，不需要专业知识</li>
+      </ul>
+    </div>
+
+    <div class="result-score" id="score" hidden>
+      <div class="score-number">0<small>/ 5</small></div>
+      <p class="result-title" id="result-title">挑战结果</p>
+      <p class="result-subtitle" id="result-subtitle">看看你的表现</p>
+      <span class="result-badge" id="result-badge">结果</span>
+    </div>
+
+    <div class="options" id="options" aria-label="答案选项" hidden></div>
+    <div class="feedback" id="feedback" role="status" aria-live="polite" hidden></div>
+    <ul class="review" id="review" hidden></ul>
+
+    <div class="bottom">
+      <p class="tip" id="tip">答错或超时即结束<br>五题全对领 1 次抽奖机会</p>
+      <button class="btn-primary" id="next" type="button">开始挑战</button>
+    </div>
+  </section>
+
+  <p class="notice" id="notice" role="status"></p>
+
+  <details class="sources" id="sources" hidden>
+    <summary>词库出处与语境</summary>
+    <p>18 道题已于 2026 年 10 月 8 日联网核查：以国产产品为主，少量加入 Gemini、ChatGPT。社区二创、用户口癖与历史活动分别标明，通用表达不绑定品牌；有公开用例不等于全网热梗。题干为活动改编，来源不认定首创，历史活动不代表当前福利。每轮最多 1 道国外产品题。</p>
+    <ul class="source-list" id="source-list"></ul>
+  </details>
+
+  <footer>抽奖资格由现场工作人员核验；本项每人最多领取一次。</footer>
+  <noscript><p>请启用 JavaScript 后开始挑战。</p></noscript>
+</main>
+
+<script>
+  'use strict';
+  // 仅收录公开表达、社区昵称、历史活动话题与通用用户口癖。
+  // 来源为使用语境佐证；不将个人体验推广为某产品的固定属性。
+  // 2026-10-08 联网核查：公开二创 / 社区用例 / 历史活动分别标注。
+  const SOURCES = {
+    doubaoAsk:['微博公开表达用例','https://weibo.com/2/detail/5334331415334702'],
+    doubaoTone:['B站口癖戏仿原作','https://www.bilibili.com/video/BV1kf9xBjECD/'],
+    whale:['社区昵称使用记录','https://linux.do/t/topic/1630726'],
+    rice:['AI拟人化小剧场与评论','https://linux.do/t/topic/2684279'],
+    kimi:['B站 Kimi 拟人化二创','https://www.bilibili.com/video/BV1uxPxedEPm/'],
+    kimiBrand:['月之暗面官方产品页面','https://www.moonshot.cn/'],
+    tea:['千问奶茶活动与用户话题报道','https://m.36kr.com/p/3673726784758659'],
+    yuanbao:['春节活动原文记录','https://m.bj.bendibao.com/news/380401.html'],
+    auto:['AutoGLM 实测与社区称呼','https://developer.cloud.tencent.com/article/2652274'],
+    autoBrand:['智谱 AutoGLM 官方页面','https://autoglm.zhipuai.cn/'],
+    wenxin:['Rubbish 主办方活动公告','https://www.rubbish.press/'],
+    choices:['国产模型选择讨论原帖','https://linux.do/t/topic/1771719'],
+    car:['50米洗车题用户测试原帖','https://www.v2ex.com/t/1191924?p=1'],
+    plain:['说人话／去AI味社区用例','https://linux.do/t/topic/1830516'],
+    tone:['AI句式戏仿讨论原帖','https://linux.do/t/topic/2948687'],
+    buddy:['TRAE社区赛博论文搭子作品','https://forum.trae.cn/t/topic/48192'],
+    banana:['Google 官方：Nano Banana 名字的由来','https://blog.google/products-and-platforms/products/gemini/how-nano-banana-got-its-name/'],
+    ghibli:['2025年吉卜力风格梗图热潮报道','https://www.ithome.com/0/841/178.htm']
+  };
+  // 谜面为活动改编。每题固定四个干扰选项，选项顺序随机。
+  const QUESTION_BANK = [
+    {id:'doubao-ask',pool:'domestic',prompt:'被追着问这问那，有人反问："你以为我是____吗？"',correct:'豆包',choices:['豆包','Kimi','腾讯元宝','千问 / Qwen'],word:{text:'你以为我是豆包吗',product:'豆包',kind:'网络表达',source:'doubaoAsk',note:'公开帖子记录了这句反问；这里考表达的对象，不认定首创者。'}},
+    {id:'doubao-tone',pool:'domestic',prompt:'"最直白、最不绕弯、最一针见血。"这串开场在模仿谁？',correct:'豆包',choices:['豆包','智谱清言','文心一言','腾讯元宝'],word:{text:'最直白不绕弯',product:'豆包',kind:'口癖戏仿',source:'doubaoTone',note:'B站已有对应口癖的戏仿视频；只引用戏仿语境，不据此评价产品。'}},
+    {id:'ds-whale',pool:'domestic',prompt:'评论里说"小鲸鱼又来干活了"，通常是在叫谁？',correct:'DeepSeek',choices:['DeepSeek','Kimi','豆包','腾讯元宝'],word:{text:'小鲸鱼',product:'DeepSeek',kind:'社区昵称',source:'whale',note:'社区评论明确将"小鲸鱼"与 DeepSeek 联系起来。昵称并非官方产品名。'}},
+    {id:'ds-rice',pool:'domestic',prompt:'AI娘小剧场里，端着白饭、被叫"阿D酱"的是哪位？',correct:'DeepSeek',choices:['DeepSeek','Kimi','Gemini','Claude'],word:{text:'阿D酱吃白饭',product:'DeepSeek',kind:'小圈子二创梗',source:'rice',note:'原帖的画面说明和评论同时出现阿D酱、DeepSeek酱、白饭。是特定二创语境，不宣称全网通用或官方设定。'}},
+    {id:'kimi-chan',pool:'domestic',prompt:'来自"月之暗面"的那位，在二创里常被称作哪一位？',correct:'Kimi酱',choices:['Kimi酱','DeepSeek酱','克劳德酱','Gemini酱'],word:{text:'Kimi酱',product:'Kimi',kind:'社区拟人化昵称',source:'kimi',extraSource:'kimiBrand',note:'B站已有以 Kimi酱为标题的二创；官方产品页面佐证"月之暗面"线索，不引用性能评价。'}},
+    {id:'qwen-tea',pool:'domestic',prompt:'2026春节，"试个AI，先喝奶茶"的免单热潮关联哪家？',correct:'千问 / Qwen',choices:['千问 / Qwen','腾讯元宝','豆包','文心一言'],word:{text:'奶茶自由',product:'千问 / Qwen',kind:'历史活动话题',source:'tea',note:'千问在2026年春节开展奶茶免单活动，引发相关用户话题。谜面为改编，不冒充网友原话；不是当前福利承诺。'}},
+    {id:'yuanbao-redpacket',pool:'domestic',prompt:'2026春节，喊出"分10亿现金红包"的AI活动是哪家？',correct:'腾讯元宝',choices:['腾讯元宝','千问 / Qwen','文心一言','豆包'],word:{text:'元宝抢红包',product:'腾讯元宝',kind:'历史活动话题',source:'yuanbao',note:'公开活动记录写明2026年春节分10亿现金红包；活动信息不代表仍在进行。'}},
+    {id:'yuanbao-rhyme',pool:'domestic',prompt:'红包文案把"缘分"的"缘"换成品牌同音字。是哪家？',correct:'腾讯元宝',choices:['腾讯元宝','千问 / Qwen','豆包','文心一言'],word:{text:'有元人',product:'腾讯元宝',kind:'活动谐音梗',source:'yuanbao',note:'活动文案使用"有元人"邀请用户；题干隐去具体谐音字，不直接展示品牌。'}},
+    {id:'zhipu-worker',pool:'domestic',prompt:'把电脑交给它干活，AutoGLM被用户调侃为"AI牛马"。来自谁？',correct:'智谱',choices:['智谱','月之暗面','阿里','百度'],word:{text:'AI牛马',product:'智谱 / 清言',kind:'产品使用话题',source:'auto',extraSource:'autoBrand',note:'公开 AutoGLM 实测标题中使用"AI牛马"，其产品来自智谱。该称呼也用于其他AI工具，不是智谱专属梗；本题以 AutoGLM 限定语境。'}},
+    {id:'wenxin-paper',pool:'domestic',prompt:'跟Rubbish合办"抽象论文大赛"，用AI成全抽象的是哪家？',correct:'文心',choices:['文心','Kimi','智谱清言','千问 / Qwen'],word:{text:'抽象论文',product:'文心一言 / 文心',kind:'历史活动话题',source:'wenxin',note:'主办方公告明确为"文心 × 落碑拾 RUBBISH"。比赛强调依据真实可考信息，并非鼓励编造学术材料。'}},
+    {id:'use-best',pool:'generic',prompt:'模型榜单换了，主力也跟着换；不站队，只看效果。是哪句？',correct:'谁强用谁',choices:['谁强用谁','多问几个AI','一问到底','只用一家'],word:{text:'谁强用谁',product:'通用',kind:'通用AI用户梗',source:'choices',note:'模型选择讨论中有"谁强用谁"原句，是用户表达，不绑定特定品牌。'}},
+    {id:'ask-more',pool:'generic',prompt:'把同一道题交给几家，再拿回答互相对照。对应哪种用法？',correct:'多问几个AI',choices:['多问几个AI','谁强用谁','反复问同一个','只看第一条'],word:{text:'多问几个AI',product:'通用',kind:'通用AI用户梗',source:'choices',note:'原帖用户提出询问多个AI共同参考；本表达是简写，不宣称首创或网络热度。'}},
+    {id:'car-wash',pool:'generic',prompt:'50米洗车梗里，"走过去更省事"的回答漏了什么？',correct:'车也得送到店里',choices:['车也得送到店里','店里能不能停车','是否已经约好时间','当天会不会下雨'],word:{text:'50米洗车题',product:'通用',kind:'网络测试话题',source:'car',note:'梗的关键是把车送到店里才能洗车。来源为具体用户测试，不用个别回答概括任何产品的固定表现。'}},
+    {id:'ai-style',pool:'generic',prompt:'篇幅刚好，却满是"赋能、闭环"式套话。用户通常要求什么？',correct:'去AI味',choices:['去AI味','再短一点','补上来源','增加例子'],word:{text:'去AI味',product:'通用',kind:'通用AI用户梗',source:'plain',note:'中文AI社区中已有"说人话／去AI味"改写指令和文风讨论，本题考用户口癖。'}},
+    {id:'not-but',pool:'generic',prompt:'先否定你的定义，再换个包装重讲。猜常被戏仿的句式。',correct:'不是…而是…',choices:['不是…而是…','虽然…但是…','既然…就…','如果…就…'],word:{text:'不是…而是…',product:'通用',kind:'通用AI用户梗',source:'tone',note:'社区原帖讨论AI文风时引用此句式；这是文风戏仿，不归因某一家产品。'}},
+    {id:'cyber-pal',pool:'generic',prompt:'像同门一样陪你拆论文、记研究偏好的AI，适合哪种称呼？',correct:'赛博搭子',choices:['赛博搭子','电子宠物','虚拟偶像','数字分身'],word:{text:'赛博搭子',product:'通用',kind:'通用AI用户梗',source:'buddy',note:'TRAE社区已有"赛博论文搭子"作品，指AI论文伴读工具；并非任何产品的专属标签。'}},
+    {id:'gemini-banana',pool:'foreign',prompt:'"纳米香蕉"从匿名代号出圈，后来被哪家产品认领？',correct:'Gemini',choices:['Gemini','ChatGPT','Claude','Grok'],word:{text:'纳米香蕉',product:'Gemini',kind:'官方沿用的网络代号',source:'banana',note:'Google官方披露 Nano Banana 的名字由来，以及将香蕉元素用于 Gemini 的过程。属于产品代号与社区传播话题，不是专业概念题。'}},
+    {id:'gpt-ghibli',pool:'foreign',prompt:'2025年3月，把自拍变成"吉卜力风"梗图的热潮主要关联谁？',correct:'ChatGPT',choices:['ChatGPT','Gemini','Claude','Grok'],word:{text:'吉卜力风头像',product:'ChatGPT',kind:'历史创作话题',source:'ghibli',note:'2025年3月的报道记录 ChatGPT 引发的吉卜力风格梗图热潮。此题考历史网络话题，不宣称该风格由其独占。'}},
+    // 以下为「AI 常识答题题库（通用版）」CSV 转换的单选题（63 题）：与圈梗题同池混抽；
+    // 无来源链接，解析存于 word.note。
+    {id:'common-01',pool:'common',prompt:'英文缩写AI指的是什么？',correct:'人工智能',choices:['人工智能','互联网','大数据','机器人'],word:{text:'AI缩写含义',product:'通用',kind:'AI 常识题',note:'AI即Artificial Intelligence（人工智能）。'}},
+    {id:'common-02',pool:'common',prompt:'以下哪一项不属于人工智能特点？',correct:'拥有和人类完全一样的情感',choices:['能学习','能思考判断','拥有和人类完全一样的情感','能识别事物'],word:{text:'AI特点辨析',product:'通用',kind:'AI 常识题',note:'AI没有人类一样的真实情感。'}},
+    {id:'common-03',pool:'common',prompt:'人工智能的核心是让机器拥有什么能力？',correct:'模仿人类智能',choices:['只会算数','模仿人类智能','只会唱歌','只会画画'],word:{text:'AI核心能力',product:'通用',kind:'AI 常识题',note:'AI核心是模仿人类智能。'}},
+    {id:'common-04',pool:'common',prompt:'人工智能最早兴起研究的年代是？',correct:'1950年代',choices:['1950年代','1800年代','2020年代','1900年代'],word:{text:'AI兴起年代',product:'通用',kind:'AI 常识题',note:'人工智能于1950年代兴起。'}},
+    {id:'common-05',pool:'common',prompt:'下列哪个不是人工智能应用？',correct:'人工手动填写纸质报表',choices:['人工手动填写纸质报表','人脸识别解锁','语音助手','智能翻译'],word:{text:'非AI应用',product:'通用',kind:'AI 常识题',note:'人工填写报表不涉及智能判断；人脸识别、语音助手、智能翻译均为典型 AI 应用。'}},
+    {id:'common-06',pool:'common',prompt:'机器通过大量数据自动总结规律的过程叫？',correct:'机器学习',choices:['手工编程','机器学习','手工画图','网络冲浪'],word:{text:'机器学习定义',product:'通用',kind:'AI 常识题',note:'机器学习是让机器从数据中总结规律。'}},
+    {id:'common-07',pool:'common',prompt:'人工智能能否完全替代人类所有工作？',correct:'不能，只能辅助人类',choices:['能，全部替代','不能，只能辅助人类','不确定','未来一定可以'],word:{text:'AI替代人类',product:'通用',kind:'AI 常识题',note:'目前AI只能辅助人类，不能完全替代。'}},
+    {id:'common-08',pool:'common',prompt:'以下哪项属于弱人工智能？',correct:'手机语音助手',choices:['手机语音助手','拥有自我意识的机器人','能自主创造文明的AI','以上都是'],word:{text:'弱人工智能',product:'通用',kind:'AI 常识题',note:'手机语音助手是专注单一领域的弱人工智能。'}},
+    {id:'common-09',pool:'common',prompt:'人工智能发展离不开哪项基础技术？',correct:'大数据',choices:['大数据','纸质书本','蜡烛照明','毛笔写字'],word:{text:'AI基础技术',product:'通用',kind:'AI 常识题',note:'大数据是AI发展的基础。'}},
+    {id:'common-10',pool:'common',prompt:'关于AI说法正确的是？',correct:'AI靠程序和数据工作',choices:['AI有自己的喜怒哀乐','AI靠程序和数据工作','AI可以不用电工作','AI天生就会所有知识'],word:{text:'AI运行方式',product:'通用',kind:'AI 常识题',note:'AI靠程序和数据运行。'}},
+    {id:'common-11',pool:'common',prompt:'强人工智能是指？',correct:'具备自主意识、接近人类综合智能',choices:['只会聊天的AI','只会做题的AI','具备自主意识、接近人类综合智能','只会画画的AI'],word:{text:'强人工智能',product:'通用',kind:'AI 常识题',note:'强AI是具备自主意识、接近人类综合智能的理论形态。'}},
+    {id:'common-12',pool:'common',prompt:'算法在人工智能中的作用是？',correct:'给机器制定运算和判断规则',choices:['只是装饰','给机器制定运算和判断规则','只会上网','只能播放视频'],word:{text:'算法作用',product:'通用',kind:'AI 常识题',note:'算法为机器制定运算和判断规则。'}},
+    {id:'common-13',pool:'common',prompt:'以下哪个不属于人工智能三要素？',correct:'纸张',choices:['数据','算法','算力','纸张'],word:{text:'AI三要素',product:'通用',kind:'AI 常识题',note:'AI三要素是数据、算法、算力。'}},
+    {id:'common-14',pool:'common',prompt:'人工智能本质是？',correct:'用机器模拟人类感知、思考、决策',choices:['精密机械制造','人工预设固定规则的自动化','用机器模拟人类感知、思考、决策','单纯的高速数据存储'],word:{text:'AI本质',product:'通用',kind:'AI 常识题',note:'AI 的本质是用机器模拟人类的感知、思考与决策能力，并能从数据中改进；不同于只能按固定规则运行的传统自动化。'}},
+    {id:'common-15',pool:'common',prompt:'手机人脸解锁用到的AI技术是？',correct:'图像识别',choices:['图像识别','声音识别','文字识别','气味识别'],word:{text:'人脸解锁技术',product:'通用',kind:'AI 常识题',note:'人脸解锁靠图像识别。'}},
+    {id:'common-16',pool:'common',prompt:'导航软件自动规划最优路线属于？',correct:'智能决策',choices:['智能决策','娱乐功能','画画创作','语音聊天'],word:{text:'导航路线规划',product:'通用',kind:'AI 常识题',note:'路线规划是智能决策应用。'}},
+    {id:'common-17',pool:'common',prompt:'输入法自动联想候选字词利用了？',correct:'人工智能',choices:['人工智能','手工记忆','巧合猜测','网络卡顿'],word:{text:'输入法联想',product:'通用',kind:'AI 常识题',note:'输入法联想是AI应用。'}},
+    {id:'common-18',pool:'common',prompt:'智能垃圾分类垃圾桶主要依靠？',correct:'图像识别',choices:['图像识别','语音识别','指纹识别','人脸识别'],word:{text:'垃圾分类识别',product:'通用',kind:'AI 常识题',note:'垃圾分类靠图像识别。'}},
+    {id:'common-19',pool:'common',prompt:'短视频平台自动推送喜欢的视频属于？',correct:'AI个性化推荐',choices:['AI个性化推荐','随机推送','人工逐个安排','病毒传播'],word:{text:'个性化推荐',product:'通用',kind:'AI 常识题',note:'这是AI个性化推荐。'}},
+    {id:'common-20',pool:'common',prompt:'智能音箱能听懂说话并回答问题，用到？',correct:'语音识别+语音合成',choices:['语音识别+语音合成','只有画画功能','只有拍照功能','无AI技术'],word:{text:'智能音箱技术',product:'通用',kind:'AI 常识题',note:'智能音箱用语音识别和语音合成。'}},
+    {id:'common-21',pool:'common',prompt:'拍照搜题识别题目文字属于？',correct:'OCR文字识别',choices:['OCR文字识别','指纹识别','声音识别','人脸识别'],word:{text:'OCR文字识别',product:'通用',kind:'AI 常识题',note:'拍照识别文字是OCR文字识别。'}},
+    {id:'common-22',pool:'common',prompt:'智能空调根据室温自动调温属于？',correct:'智能控制',choices:['智能控制','手工操作','没有科技含量','只能装饰'],word:{text:'智能空调调温',product:'通用',kind:'AI 常识题',note:'自动调温是智能控制。'}},
+    {id:'common-23',pool:'common',prompt:'翻译软件实时互译用到的AI技术是？',correct:'机器翻译',choices:['机器翻译','图像生成','人脸识别','游戏编程'],word:{text:'机器翻译',product:'通用',kind:'AI 常识题',note:'实时翻译是机器翻译。'}},
+    {id:'common-24',pool:'common',prompt:'智能手表监测心率、运动步数，属于AI哪类应用？',correct:'智能健康监测',choices:['娱乐消遣','智能健康监测','画图创作','机器翻译'],word:{text:'智能健康监测',product:'通用',kind:'AI 常识题',note:'监测健康数据是智能健康监测。'}},
+    {id:'common-25',pool:'common',prompt:'车站人脸识别安检用到的技术是？',correct:'生物特征识别',choices:['语音识别','文字识别','生物特征识别','气味识别'],word:{text:'生物特征识别',product:'通用',kind:'AI 常识题',note:'人脸识别属于生物特征识别。'}},
+    {id:'common-26',pool:'common',prompt:'AI绘画输入文字就能生成图画，属于？',correct:'生成式人工智能',choices:['语音识别','人脸识别','机器翻译','生成式人工智能'],word:{text:'生成式AI绘画',product:'通用',kind:'AI 常识题',note:'文字生成图画是生成式人工智能。'}},
+    {id:'common-27',pool:'common',prompt:'智能家居可以手机远程开关灯，核心依靠？',correct:'人工智能+物联网',choices:['普通电线','人工智能+物联网','手工拉线','风力发电'],word:{text:'智能家居物联网',product:'通用',kind:'AI 常识题',note:'智能家居靠AI+物联网。'}},
+    {id:'common-28',pool:'common',prompt:'语音助手主要利用了什么AI技术？',correct:'自然语言处理',choices:['自然语言处理','图像识别','机器学习','数据挖掘'],word:{text:'语音助手NLP',product:'通用',kind:'AI 常识题',note:'语音助手核心是NLP。'}},
+    {id:'common-29',pool:'common',prompt:'自动驾驶依靠的关键AI技术是？',correct:'目标检测',choices:['语音识别','目标检测','数据分析','网络优化'],word:{text:'自动驾驶目标检测',product:'通用',kind:'AI 常识题',note:'自动驾驶靠目标检测识别路况。'}},
+    {id:'common-30',pool:'common',prompt:'最早提出“人工智能”这个术语的是？',correct:'麦卡锡',choices:['图灵','麦卡锡','明斯基','香农'],word:{text:'人工智能术语提出',product:'通用',kind:'AI 常识题',note:'麦卡锡在1956年达特茅斯会议提出“人工智能”。'}},
+    {id:'common-31',pool:'common',prompt:'深度学习属于哪种AI技术范畴？',correct:'连接主义',choices:['符号主义','行为主义','连接主义','逻辑主义'],word:{text:'深度学习流派',product:'通用',kind:'AI 常识题',note:'深度学习属于连接主义。'}},
+    {id:'common-32',pool:'common',prompt:'AI在医疗领域的应用主要体现在？',correct:'以上都是',choices:['疾病诊断辅助','药物研发','医疗设备控制','以上都是'],word:{text:'AI医疗应用',product:'通用',kind:'AI 常识题',note:'AI在医疗多环节都有应用。'}},
+    {id:'common-33',pool:'common',prompt:'以下哪项不是AI带来的挑战？',correct:'提高生产效率',choices:['就业冲击','提高生产效率','伦理道德问题','隐私泄露风险'],word:{text:'AI挑战辨析',product:'通用',kind:'AI 常识题',note:'提高生产效率是收益不是挑战。'}},
+    {id:'common-34',pool:'common',prompt:'增强现实技术结合了AI与？',correct:'计算机图形学',choices:['虚拟现实','计算机图形学','传感器技术','网络技术'],word:{text:'AR技术结合',product:'通用',kind:'AI 常识题',note:'AR结合AI与计算机图形学。'}},
+    {id:'common-35',pool:'common',prompt:'以下哪个属于人工智能的典型应用？',correct:'智能音箱回答天气问题',choices:['计算器算数','智能音箱回答天气问题','手摇发电的手电筒','机械闹钟定时响铃'],word:{text:'典型AI应用',product:'通用',kind:'AI 常识题',note:'智能音箱能理解语音并回答，是典型AI应用。'}},
+    {id:'common-36',pool:'common',prompt:'人工智能和普通自动化的最大区别是什么？',correct:'人工智能能自己学习新东西',choices:['人工智能需要用电','人工智能能自己学习新东西','人工智能更便宜','人工智能不会出错'],word:{text:'AI与自动化区别',product:'通用',kind:'AI 常识题',note:'AI可通过数据训练不断学习改进。'}},
+    {id:'common-37',pool:'common',prompt:'2025年北京机器人马拉松比赛中，机器人主要完成的任务是？',correct:'长距离跑步',choices:['唱歌比赛','长距离跑步','做数学题','下围棋'],word:{text:'机器人马拉松',product:'通用',kind:'AI 常识题',note:'机器人马拉松考验长时间稳定行走/跑步。'}},
+    {id:'common-38',pool:'common',prompt:'OpenAI 目前的 CEO（首席执行官）是谁？',correct:'萨姆·奥特曼（Sam Altman）',choices:['埃隆·马斯克','萨姆·奥特曼（Sam Altman）','比尔·盖茨','拉里·佩奇'],word:{text:'OpenAI CEO',product:'通用',kind:'AI 常识题',note:'OpenAI 现任 CEO 是萨姆·奥特曼（Sam Altman）。马斯克是 2015 年的联合创始人之一，2018 年已退出，且从未担任 CEO。'}},
+    {id:'common-39',pool:'common',prompt:'以下哪个设备属于人工智能设备？',correct:'能自动规划路线的扫地机器人',choices:['传统电饭煲','能自动规划路线的扫地机器人','普通台灯','老式收音机'],word:{text:'AI设备辨识',product:'通用',kind:'AI 常识题',note:'扫地机器人用传感器和算法自主导航。'}},
+    {id:'common-40',pool:'common',prompt:'为什么说AI可能会犯错？',correct:'AI没有足够多的好数据',choices:['AI故意捣乱','AI没有足够多的好数据','AI没有大脑','AI永远正确'],word:{text:'AI犯错原因',product:'通用',kind:'AI 常识题',note:'数据不足或有偏差时AI可能出错。'}},
+    {id:'common-41',pool:'common',prompt:'以下哪项不是人工智能的特征？',correct:'完全不会出错',choices:['数据驱动','自主学习','完全不会出错','能够处理复杂任务'],word:{text:'AI特征辨析',product:'通用',kind:'AI 常识题',note:'AI并非完美无缺，会受限于数据和算法。'}},
+    {id:'common-42',pool:'common',prompt:'以下哪一项不属于人工智能的应用领域？',correct:'传统水墨画创作',choices:['机器翻译','无人驾驶','人机博弈','传统水墨画创作'],word:{text:'非AI应用领域',product:'通用',kind:'AI 常识题',note:'传统水墨画创作是艺术，不属AI技术范畴。'}},
+    {id:'common-43',pool:'common',prompt:'被誉为“人工智能之父”的科学家是？',correct:'图灵',choices:['图灵','冯·诺依曼','爱因斯坦','爱迪生'],word:{text:'人工智能之父',product:'通用',kind:'AI 常识题',note:'图灵在AI领域有奠基性贡献。'}},
+    {id:'common-44',pool:'common',prompt:'在人工智能三大技术基础中，被比喻为“燃料”的是？',correct:'数据',choices:['数据','算法','算力','以上都不是'],word:{text:'AI三要素燃料',product:'通用',kind:'AI 常识题',note:'数据是AI学习和决策的基础原材料。'}},
+    {id:'common-45',pool:'common',prompt:'AlphaGo战胜围棋世界冠军，主要依赖于哪种核心技术？',correct:'以上都是',choices:['大数据分析','深度学习算法','超级计算机算力','以上都是'],word:{text:'AlphaGo技术',product:'通用',kind:'AI 常识题',note:'AlphaGo是数据、算法、算力协同结果。'}},
+    {id:'common-46',pool:'common',prompt:'智慧城市交通系统优化交通流量，主要体现AI在哪方面应用？',correct:'城市管理',choices:['智慧生活','经济发展','城市管理','农业生产'],word:{text:'智慧城市管理',product:'通用',kind:'AI 常识题',note:'优化交通属于城市管理智能化。'}},
+    {id:'common-47',pool:'common',prompt:'深蓝（Deep Blue）主要采用以下哪种算法？',correct:'穷举搜索',choices:['决策树','穷举搜索','卷积神经网络','K-Means聚类'],word:{text:'深蓝算法',product:'通用',kind:'AI 常识题',note:'深蓝用穷举搜索评估所有可能棋步。'}},
+    {id:'common-48',pool:'common',prompt:'AI导致部分传统岗位减少，主要体现哪方面挑战？',correct:'就业结构变化',choices:['数据安全问题','就业结构变化','伦理道德问题','技术垄断问题'],word:{text:'就业结构挑战',product:'通用',kind:'AI 常识题',note:'自动化替代人力导致就业结构变化。'}},
+    {id:'common-49',pool:'common',prompt:'保护个人信息不被泄露和滥用，应增强哪方面意识？',correct:'数据安全与隐私保护',choices:['数据安全与隐私保护','算法优化','算力提升','技术创新'],word:{text:'隐私保护意识',product:'通用',kind:'AI 常识题',note:'个人数据保护是应对隐私风险核心。'}},
+    {id:'common-50',pool:'common',prompt:'在“寻找最大值”的算法中，第一步通常是？',correct:'假设第一个数字为当前最大值',choices:['比较所有数字','假设第一个数字为当前最大值','输出结果','随机选择一个数字作为最大值'],word:{text:'寻找最大值算法',product:'通用',kind:'AI 常识题',note:'算法初始化时常假设第一个元素为当前最大值。'}},
+    {id:'common-51',pool:'common',prompt:'下列哪项是人工智能的应用？',correct:'智能手表',choices:['普通冰箱','智能手表','传统机械闹钟','传统电话机'],word:{text:'AI应用辨识',product:'通用',kind:'AI 常识题',note:'智能手表含AI能力。'}},
+    {id:'common-52',pool:'common',prompt:'手机拍照识别植物名称，主要用到了什么技术？',correct:'图像识别',choices:['语音识别','图像识别','指纹识别','声纹识别'],word:{text:'拍照识图技术',product:'通用',kind:'AI 常识题',note:'识图是图像识别。'}},
+    {id:'common-53',pool:'common',prompt:'第一个在围棋比赛中战胜人类冠军的AI是？',correct:'阿尔法狗（AlphaGo）',choices:['小度','阿尔法狗（AlphaGo）','天猫精灵','IBM 深蓝（Deep Blue）'],word:{text:'围棋AI首胜',product:'通用',kind:'AI 常识题',note:'AlphaGo 于 2016 年战胜围棋世界冠军李世石；深蓝战胜的是国际象棋冠军（1997 年）。'}},
+    {id:'common-54',pool:'common',prompt:'以下哪种行为可能泄露隐私？',correct:'在朋友圈晒家庭住址',choices:['不告诉陌生人密码','在朋友圈晒家庭住址','定期清理手机缓存','不点击陌生链接'],word:{text:'隐私泄露行为',product:'通用',kind:'AI 常识题',note:'晒住址会泄露隐私。'}},
+    {id:'common-55',pool:'common',prompt:'人工智能的核心能力是？',correct:'从数据中学习并行动',choices:['像人类一样思考','从数据中学习并行动','取代人类工作','拥有情感'],word:{text:'AI核心能力',product:'通用',kind:'AI 常识题',note:'AI核心是从数据学习并行动。'}},
+    {id:'common-56',pool:'common',prompt:'你用AI画了一幅画，这幅画的版权属于谁？',correct:'不清楚，需要讨论',choices:['AI程序','你自己','开发AI的公司','不清楚，需要讨论'],word:{text:'AI绘画版权',product:'通用',kind:'AI 常识题',note:'AI生成内容版权尚存争议，需讨论（建议以平台规则为准）。'}},
+    {id:'common-57',pool:'common',prompt:'无人驾驶汽车主要依靠什么技术安全行驶？',correct:'传感器和算法',choices:['车内预存地图','传感器和算法','驾驶员遥控','卫星导航'],word:{text:'无人驾驶感知',product:'通用',kind:'AI 常识题',note:'无人驾驶依靠摄像头、雷达等传感器感知环境，再由算法决策，而非依赖预存地图。'}},
+    {id:'common-58',pool:'common',prompt:'面对人工智能的发展，我们应该？',correct:'学习并合理利用',choices:['害怕它','随便使用','学习并合理利用','完全依赖它'],word:{text:'AI应对态度',product:'通用',kind:'AI 常识题',note:'应学习并合理利用AI。'}},
+    {id:'common-59',pool:'common',prompt:'2016年AI程序AlphaGo战胜围棋冠军李世石，它是由哪家公司开发的？',correct:'谷歌DeepMind',choices:['谷歌DeepMind','微软研究院','苹果实验室','亚马逊AWS'],word:{text:'AlphaGo开发方',product:'通用',kind:'AI 常识题',note:'AlphaGo由谷歌旗下DeepMind开发。'}},
+    {id:'common-60',pool:'common',prompt:'2020年AI程序在医学影像分析中表现优异，能帮助医生诊断什么？',correct:'癌症等多种疾病',choices:['感冒','骨折','癌症等多种疾病','头痛'],word:{text:'医学影像诊断',product:'通用',kind:'AI 常识题',note:'AI可辅助诊断癌症等多种疾病。'}},
+    {id:'common-61',pool:'common',prompt:'问智能助手明天会下雨吗，助手查询后告诉答案，AI没有做的是？',correct:'控制天气',choices:['理解问题','查询天气数据','组织回答语言','控制天气'],word:{text:'智能助手边界',product:'通用',kind:'AI 常识题',note:'AI可以理解回答问题，但不能控制天气。'}},
+    {id:'common-62',pool:'common',prompt:'2022年AI绘画工具火爆，用户输入文字就能生成图画，这款工具可能是？',correct:'Midjourney或DALL-E',choices:['Midjourney或DALL-E','Word','Excel','PowerPoint'],word:{text:'AI绘画工具',product:'通用',kind:'AI 常识题',note:'Midjourney、DALL-E是AI绘画工具。'}},
+    {id:'common-63',pool:'common',prompt:'具备自动泊车功能的汽车，主要通过什么感知周围环境？',correct:'传感器和摄像头',choices:['仅用GPS','传感器和摄像头','仅用地图','仅凭惯性推算（不依赖外部感知）'],word:{text:'自动泊车感知',product:'通用',kind:'AI 常识题',note:'自动泊车依靠超声波雷达、摄像头等传感器实时感知周边障碍物，再由算法规划泊车路径。'}}
+  ];
+  const WORDS = QUESTION_BANK.filter(item=>item.pool!=='common').map(item=>item.word);
+
+  const sheet=document.getElementById('sheet');
+  const question=document.getElementById('question');
+  const options=document.getElementById('options');
+  const feedback=document.getElementById('feedback');
+  const intro=document.getElementById('intro');
+  const score=document.getElementById('score');
+  const review=document.getElementById('review');
+  const next=document.getElementById('next');
+  const progress=document.getElementById('progress');
+  const count=document.getElementById('count');
+  const category=document.getElementById('category');
+  const tip=document.getElementById('tip');
+  const notice=document.getElementById('notice');
+  const fullscreen=document.getElementById('fullscreen');
+  const sources=document.getElementById('sources');
+  const timer=document.getElementById('timer');
+  const timerNumber=document.getElementById('timer-number');
+  const timerRing=document.getElementById('timer-ring');
+  const progressDots=document.getElementById('progress-dots');
+  const resultTitle=document.getElementById('result-title');
+  const resultSubtitle=document.getElementById('result-subtitle');
+  const resultBadge=document.getElementById('result-badge');
+
+  const QUESTION_LIMIT=5000;
+  const TIMER_CIRCUMFERENCE=144.513; // 2 * PI * 23
+  let round=[],position=0,answers=[],phase='welcome',answered=false,noticeTimer;
+  let timerInterval,timerTimeout,deadline=0;
+
+  function stopTimer() {
+    clearInterval(timerInterval);clearTimeout(timerTimeout);
+    timerInterval=null;timerTimeout=null;deadline=0;
+    timer.classList.remove('ending');
+  }
+  function renderTime(milliseconds) {
+    const remaining=Math.max(0,milliseconds);
+    const seconds=Math.ceil(remaining/1000);
+    timerNumber.textContent=seconds;
+    timerRing.style.strokeDashoffset=String(TIMER_CIRCUMFERENCE*(1-remaining/QUESTION_LIMIT));
+    timer.setAttribute('aria-label',remaining>0?`剩余${seconds}秒`:'时间到');
+    timer.classList.toggle('ending',remaining>0&&remaining<=1500);
+  }
+  function tickTimer() {
+    if(phase!=='playing'||answered||!deadline)return;
+    const remaining=deadline-Date.now();
+    renderTime(remaining);
+    if(remaining<=0)answer(null,null,true);
+  }
+  function startTimer() {
+    stopTimer();deadline=Date.now()+QUESTION_LIMIT;
+    timer.hidden=false;timer.classList.remove('expired');renderTime(QUESTION_LIMIT);
+    timerInterval=setInterval(tickTimer,50);
+    timerTimeout=setTimeout(tickTimer,QUESTION_LIMIT);
+  }
+  function shuffle(items) {
+    const a=[...items];
+    for(let i=a.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+    return a;
+  }
+  function say(text) { clearTimeout(noticeTimer); notice.textContent=text; noticeTimer=setTimeout(()=>notice.textContent='',3000); }
+
+  // 更新进度圆点
+  function updateProgressDots() {
+    const dots=progressDots.querySelectorAll('.progress-dot');
+    const total=5;
+    const answeredCount=answers.length;
+    const currentIndex=phase==='playing'?position:answeredCount;
+    dots.forEach((dot,i)=>{
+      dot.classList.remove('active','done');
+      if(i<answeredCount) dot.classList.add('done');
+      else if(i===currentIndex&&phase==='playing') dot.classList.add('active');
+    });
+  }
+
+  function makeRound() {
+    let items=shuffle(QUESTION_BANK).slice(0,5);
+    if(items.map(q=>q.id).join(',')===round.map(q=>q.id).join(',')) [items[0],items[1]]=[items[1],items[0]];
+    round=items.map(item=>({...item,choices:shuffle(item.choices)}));
+  }
+  function tally() { return answers.filter(answer=>answer.correct).length; }
+
+  function reset(change) {
+    stopTimer();timer.hidden=true;
+    sources.hidden=true;sources.open=false;
+    if(change||!round.length)makeRound();
+    position=0;answers=[];phase='welcome';answered=false;
+    question.replaceChildren('今天这些 AI 圈梗，',document.createElement('br'),'你能认出几个？');
+    category.textContent='国产产品梗 × 中文用户梗';
+    intro.hidden=false;options.hidden=true;feedback.hidden=true;score.hidden=true;review.hidden=true;
+    next.hidden=false;next.disabled=false;next.textContent='开始挑战';
+    progress.innerHTML='每轮 <strong>5</strong> 题';count.innerHTML='已答对 <strong>0</strong> 题';
+    tip.textContent='答错或超时即结束，五题全对领 1 次机会。';
+    updateProgressDots();
+  }
+
+  function showQuestion() {
+    phase='playing';answered=false;
+    const current=round[position];
+    category.textContent=current.pool==='generic'?'通用 AI 用户梗':current.pool==='foreign'?'国外产品出圈话题':current.pool==='common'?'AI 常识题':'国产产品与社区表达';
+    question.textContent=current.prompt;
+    intro.hidden=true;score.hidden=true;review.hidden=true;feedback.hidden=true;options.hidden=false;
+    options.replaceChildren();
+    current.choices.forEach((text,index)=>{
+      const button=document.createElement('button');button.type='button';button.className='choice';
+      const letter=document.createElement('span');letter.className='choice-letter';letter.textContent='ABCD'[index];
+      const label=document.createElement('span');label.textContent=text;
+      button.append(letter,label);button.addEventListener('click',()=>answer(text,button));options.append(button);
+    });
+    progress.innerHTML=`第 <strong>${position+1}</strong> / 5 题`;
+    count.innerHTML=`已答对 <strong>${tally()}</strong> 题`;
+    next.hidden=true;
+    tip.textContent='每题 5 秒；答对切题，答错或超时即结束。';
+    updateProgressDots();
+    startTimer();
+  }
+
+  function answer(value,button,timedOut=false) {
+    if(answered||phase!=='playing')return;
+    timedOut=timedOut||Date.now()>=deadline;
+    if(timedOut){value=null;button=null;renderTime(0);}
+    else renderTime(deadline-Date.now());
+    answered=true;
+    stopTimer();timer.classList.toggle('expired',timedOut);
+    if(!timedOut)timer.setAttribute('aria-label',`已作答，剩余${timerNumber.textContent}秒`);
+    const current=round[position];const correct=!timedOut&&value===current.correct;
+    answers.push({question:current.prompt,correct,value,expected:current.correct,timedOut,word:current.word,explanation:current.explanation});
+    [...options.children].forEach(option=>{
+      option.disabled=true;
+      const text=option.lastElementChild.textContent;
+      if(text===current.correct) option.classList.add('correct');
+      else if(button&&option===button&&!correct) option.classList.add('wrong');
+    });
+    if(button){button.classList.add('selected');button.setAttribute('aria-pressed','true');}
+    count.innerHTML=`已答对 <strong>${tally()}</strong> 题`;
+    position++;
+    updateProgressDots();
+    !correct||position===round.length?results():setTimeout(showQuestion,800);
+  }
+
+  function results() {
+    stopTimer();timer.hidden=true;
+    sources.hidden=false;
+    phase='result';const total=tally();
+    const passed=answers.length===round.length&&answers.every(item=>item.correct);
+    const lastAnswer=answers[answers.length-1];
+
+    score.hidden=false;review.hidden=false;
+    options.hidden=true;feedback.hidden=true;intro.hidden=true;
+
+    // 分数展示
+    const scoreNum=score.querySelector('.score-number');
+    scoreNum.innerHTML=`${total}<small>/ 5</small>`;
+
+    if(passed){
+      resultTitle.textContent='五连对！挑战成功';
+      resultSubtitle.textContent='获得 1 次抽奖机会';
+      resultBadge.textContent='🎉 挑战成功';
+      resultBadge.className='result-badge success';
+      category.textContent='五题全对 · 挑战成功';
+      question.textContent='恭喜你，全部答对！';
+    } else {
+      resultTitle.textContent=lastAnswer.timedOut?'时间到，本轮结束':'答错了，本轮结束';
+      resultSubtitle.textContent=`止步第 ${answers.length} 题`;
+      resultBadge.textContent='再接再厉';
+      resultBadge.className='result-badge fail';
+      category.textContent=`止步第 ${answers.length} 题`;
+      question.textContent=lastAnswer.timedOut?'时间到，本轮结束。':'答错了，本轮结束。';
+    }
+
+    review.replaceChildren();
+    answers.forEach((answer,index)=>{
+      const li=document.createElement('li');
+      const label=document.createElement('b');
+      const statusIcon=document.createElement('span');
+      statusIcon.className='review-status '+(answer.correct?'correct':'wrong');
+      statusIcon.textContent=answer.correct?'✓':'✗';
+      label.append(statusIcon,`${index+1}. ${answer.timedOut?'超时未答':answer.correct?'答对':'未答对'} · ${answer.expected}`);
+      const text=document.createElement('div');text.textContent=answer.question;
+      const picked=document.createElement('div');picked.textContent=answer.timedOut?'本题超时未作答':`你的答案：${answer.value}`;
+      const note=document.createElement('div');note.textContent=answer.explanation||answer.word.note;
+      li.append(label,text,picked,note);
+      if(answer.word.source){
+        const link=document.createElement('a');[link.textContent,link.href]=SOURCES[answer.word.source];link.target='_blank';link.rel='noopener noreferrer';
+        li.append(link);
+      }
+      if(answer.word.extraSource){
+        const extra=document.createElement('a');[extra.textContent,extra.href]=SOURCES[answer.word.extraSource];extra.target='_blank';extra.rel='noopener noreferrer';
+        li.append(document.createElement('br'),extra);
+      }
+      review.append(li);
+    });
+    progress.innerHTML=passed?'已完成 <strong>5 / 5</strong> 题':`本轮结束 · 已作答 <strong>${answers.length}</strong> / 5 题`;
+    count.innerHTML=`已答对 <strong>${total}</strong> 题`;
+    next.hidden=false;next.disabled=false;next.textContent='换一组再玩';
+    tip.textContent=passed?'请向工作人员展示结果，核验 1 次抽奖机会。本项每人限领一次。':'本轮未获得抽奖机会。连续答对 5 题才能过关。';
+    updateProgressDots();
+  }
+
+  next.addEventListener('click',()=>{
+    if(phase==='welcome')showQuestion();
+    else if(phase==='result'){reset(true);showQuestion();}
+  });
+  document.getElementById('shuffle').addEventListener('click',()=>{reset(true);say('已换一组，成绩重新开始。');});
+  document.getElementById('restart').addEventListener('click',()=>{reset(false);say('已重新开始，保留这组题目。');});
+
+  function syncFullscreen() {
+    const on=Boolean(document.fullscreenElement)||sheet.classList.contains('screen-mode');
+    fullscreen.textContent=on?'退出全屏':'全屏';fullscreen.setAttribute('aria-pressed',String(on));
+  }
+  fullscreen.addEventListener('click',async()=>{
+    try {
+      if(document.fullscreenElement)await document.exitFullscreen();
+      else if(sheet.classList.contains('screen-mode'))sheet.classList.remove('screen-mode');
+      else if(sheet.requestFullscreen&&document.fullscreenEnabled)await sheet.requestFullscreen();
+      else sheet.classList.add('screen-mode');
+    }catch{sheet.classList.add('screen-mode');}
+    syncFullscreen();
+  });
+  document.addEventListener('fullscreenchange',syncFullscreen);
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'){sheet.classList.remove('screen-mode');syncFullscreen();}});
+
+  const sourceList=document.getElementById('source-list');
+  WORDS.forEach(item=>{
+    const li=document.createElement('li');const title=document.createElement('strong');title.textContent=item.text;
+    const kind=document.createElement('small');kind.textContent=`${item.product} · ${item.kind}`;
+    const note=document.createElement('div');note.textContent=item.note;
+    const link=document.createElement('a');[link.textContent,link.href]=SOURCES[item.source];link.target='_blank';link.rel='noopener noreferrer';
+    li.append(title,kind,note,link);
+    if(item.extraSource){
+      const extra=document.createElement('a');[extra.textContent,extra.href]=SOURCES[item.extraSource];extra.target='_blank';extra.rel='noopener noreferrer';
+      li.append(document.createElement('br'),extra);
+    }
+    sourceList.append(li);
+  });
+  reset(true);
+</script>
+</body>
+</html>
