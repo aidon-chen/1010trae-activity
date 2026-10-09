@@ -616,6 +616,8 @@ img { display: block; max-width: 100%; }
 }
 
 .card {
+  display: flex;          /* 纵向 flex，配合 flex:1 让三张卡片内部各区块横向对齐 */
+  flex-direction: column;
   background: var(--bg-default);
   border: 1px solid var(--border-l1);
   border-radius: var(--radius-2xl);
@@ -674,12 +676,14 @@ img { display: block; max-width: 100%; }
   line-height: 20px;
   color: var(--text-secondary);
   margin-bottom: var(--sp-8);
+  min-height: 40px; /* 预留两行高度，保证三张卡片的 features 起始位置一致 */
 }
 .card__features {
   display: flex;
   flex-direction: column;
   gap: var(--sp-3);
   margin-bottom: var(--sp-10);
+  flex: 1; /* 占满剩余空间，把奖励行和按钮统一压到卡片底部 */
 }
 .card__feature {
   display: flex;
@@ -1160,7 +1164,7 @@ img { display: block; max-width: 100%; }
       <p class="section-head__desc">完成任意一项即可获得抽奖机会，叠加挑战可累计次数</p>
     </div>
 
-    <div class="cards">
+    <div class="cards" style="position: relative;">
       <!-- 卡片 01 -->
       <div class="card card--01">
         <div class="card__header">
@@ -1187,8 +1191,8 @@ img { display: block; max-width: 100%; }
         </div>
         <p class="card__desc">你能分辨出哪些是真实照片，哪些是 AI 生成的吗？</p>
         <ul class="card__features">
-          <li class="card__feature">判断每张图片是「真人」还是「AI」</li>
-          <li class="card__feature">两个难度等级，奖励翻倍</li>
+          <li class="card__feature">简易版：7 道图片题，至少答对 4 题达标</li>
+          <li class="card__feature">困难版：20 道图片题，至少答对 14 题达标</li>
         </ul>
         <div class="card__reward">简易版：1 次 · 困难版：2 次</div>
         <div class="card__btn-row">
@@ -1310,6 +1314,7 @@ img { display: block; max-width: 100%; }
     <div class="footer__copy">© 2026 IronSpirit × TRAE. All rights reserved.</div>
   </div>
 </footer>
+
 
 
 
