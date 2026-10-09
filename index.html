@@ -183,6 +183,27 @@ img { display: block; max-width: 100%; }
 .nav__cta:hover { background: var(--brand-500); }
 .nav__cta:active { transform: scale(0.97); background: var(--brand-700); }
 
+/* IronSpirit logo 通用工具类 */
+.iron-logo { display: block; width: auto; }
+.iron-logo--invert { filter: brightness(0) invert(1); }
+
+/* Nav 双品牌 */
+.nav__brand-iron {
+  height: 20px;
+}
+.nav__brand-iron-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-default);
+  margin-left: var(--sp-2);
+}
+.nav__brand-sep--x {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  margin: 0 var(--sp-2);
+  font-weight: 500;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    Hero — 代码编辑器风格 + TRAE 品牌感
    ═══════════════════════════════════════════════════════════════ */
@@ -214,6 +235,34 @@ img { display: block; max-width: 100%; }
   pointer-events: none;
 }
 
+/* Hero 双品牌大水印（首屏装饰） */
+.hero__co-brand-watermark {
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.12;
+  z-index: 1;
+  pointer-events: none;
+}
+.hero__co-brand-watermark svg {
+  width: 60px;
+  height: auto;
+  color: var(--brand-600);
+}
+.hero__co-brand-watermark img {
+  width: 60px;
+  height: auto;
+}
+.hero__co-brand-watermark .sep {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--brand-600);
+  line-height: 1;
+}
+
 .hero__grid {
   position: relative;
   z-index: 1;
@@ -221,6 +270,11 @@ img { display: block; max-width: 100%; }
   grid-template-columns: 1.1fr 1fr;
   gap: var(--sp-24);
   align-items: center;
+}
+
+.hero__text {
+  position: relative;
+  z-index: 1;
 }
 
 .hero__eyebrow {
@@ -246,6 +300,26 @@ img { display: block; max-width: 100%; }
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50%      { opacity: 0.5; transform: scale(0.7); }
+}
+
+/* Hero eyebrow 双 logo 组合 */
+.hero__eyebrow-logos {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-right: var(--sp-2);
+}
+.hero__eyebrow-logos img,
+.hero__eyebrow-logos svg {
+  height: 14px;
+  width: auto;
+}
+.hero__eyebrow-logos svg { color: var(--brand-600); }
+.hero__eyebrow-logos .sep {
+  font-size: 12px;
+  color: var(--brand-600);
+  font-weight: 500;
+  line-height: 1;
 }
 
 .hero__title {
@@ -395,6 +469,7 @@ img { display: block; max-width: 100%; }
   font-family: var(--font-family-mono);
   font-size: 13px;
   line-height: 20px;
+  position: relative;
 }
 .code-window__header {
   display: flex;
@@ -826,6 +901,34 @@ img { display: block; max-width: 100%; }
 }
 .lucky-card__btn:active { transform: scale(0.97); }
 
+/* 抽奖卡片双品牌水印 */
+.lucky-card__co-brand {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.18;
+  z-index: 1;
+  pointer-events: none;
+}
+.lucky-card__co-brand svg {
+  width: 60px;
+  height: auto;
+  color: white;
+}
+.lucky-card__co-brand img {
+  width: 60px;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+.lucky-card__co-brand .sep {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    Footer
    ═══════════════════════════════════════════════════════════════ */
@@ -844,7 +947,7 @@ img { display: block; max-width: 100%; }
 .footer__brand {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
+  gap: var(--sp-6);
   font-size: 13px;
   color: var(--text-tertiary);
 }
@@ -852,6 +955,22 @@ img { display: block; max-width: 100%; }
   width: 16px;
   height: 16px;
   color: var(--brand-600);
+}
+.footer__iron-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+.footer__iron-logo {
+  height: 16px;
+  width: auto;
+}
+.footer__brand-divider {
+  width: 1px;
+  height: 12px;
+  background: var(--border-l2);
 }
 .footer__links {
   display: flex;
@@ -877,6 +996,15 @@ img { display: block; max-width: 100%; }
   .cards { grid-template-columns: 1fr; }
   .rules__grid { grid-template-columns: 1fr; }
   .section-head__title { font-size: 26px; line-height: 34px; }
+  /* 双品牌响应式：nav 隐藏文字 */
+  .nav__brand-text { display: none; }
+  .hero__eyebrow-logos img,
+  .hero__eyebrow-logos svg { height: 12px; }
+  .lucky-card__co-brand svg,
+  .lucky-card__co-brand img { width: 48px; }
+  .hero__co-brand-watermark svg,
+  .hero__co-brand-watermark img { width: 48px; }
+  .hero__co-brand-watermark .sep { font-size: 14px; }
 }
 
 @media (max-width: 520px) {
@@ -893,6 +1021,18 @@ img { display: block; max-width: 100%; }
   .code-window { font-size: 11px; line-height: 18px; }
   .code-window__body { padding: var(--sp-6) var(--sp-8); }
   .footer__inner { flex-direction: column; align-items: flex-start; }
+  /* 双品牌响应式：移动端 */
+  .nav__brand-iron { height: 18px; }
+  .hero__eyebrow-logos img,
+  .hero__eyebrow-logos svg { height: 10px; }
+  .lucky-card__co-brand svg,
+  .lucky-card__co-brand img { width: 36px; }
+  .hero__co-brand-watermark { bottom: 8px; right: 10px; gap: 6px; }
+  .hero__co-brand-watermark svg,
+  .hero__co-brand-watermark img { width: 36px; }
+  .hero__co-brand-watermark .sep { font-size: 12px; }
+  .footer__brand { flex-direction: column; align-items: flex-start; gap: var(--sp-3); }
+  .footer__brand-divider { display: none; }
 }
 </style>
 </head>
@@ -906,14 +1046,11 @@ img { display: block; max-width: 100%; }
       <svg class="nav__brand-logo" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"></path>
       </svg>
-      <span>TraeDesign</span>
-      <span class="nav__brand-sep"></span>
-      <span class="nav__brand-sub">IronSpirit 活动</span>
+      <span class="nav__brand-text">Trae</span>
+      <span class="nav__brand-sep--x">×</span>
+      <img class="iron-logo nav__brand-iron" src="ironspirit-logo.png" alt="IronSpirit">
+      <span class="nav__brand-iron-text">IronSpirit</span>
     </div>
-    <a href="#challenges" class="nav__cta">
-      立即挑战
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-    </a>
   </div>
 </nav>
 
@@ -922,16 +1059,12 @@ img { display: block; max-width: 100%; }
   <div class="container hero__grid">
     <!-- 左侧文案 -->
     <div class="hero__text">
-      <div class="hero__eyebrow">
-        <span class="hero__eyebrow-dot"></span>
-        IronSpirit × TRAE · AI Challenge Day
-      </div>
       <h1 class="hero__title">
         来挑战你的<br>
         <span>AI 认知边界</span>
       </h1>
       <p class="hero__subtitle">
-        铁人战队协会 × <strong>Trae 设计系统</strong>联合呈现。<br>
+        铁人战队协会 × <strong>Trae&nbsp;</strong>联合呈现。<br>
         三项趣味挑战，通关即获抽奖机会，赢取限量周边。
       </p>
       <div class="hero__cta-row">
@@ -943,20 +1076,6 @@ img { display: block; max-width: 100%; }
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
           活动规则
         </a>
-      </div>
-      <div class="hero__stats">
-        <div>
-          <div class="hero__stat-num">3</div>
-          <div class="hero__stat-label">项挑战</div>
-        </div>
-        <div>
-          <div class="hero__stat-num">200</div>
-          <div class="hero__stat-label">份奖品</div>
-        </div>
-        <div>
-          <div class="hero__stat-num">100%</div>
-          <div class="hero__stat-label">中奖率</div>
-        </div>
       </div>
     </div>
 
@@ -1019,16 +1138,14 @@ img { display: block; max-width: 100%; }
             <span class="code-line__content"><span class="cl-doc">// 准备好接受挑战了吗？</span><span class="code-cursor"></span></span>
           </div>
         </div>
-      </div>
-
-      <!-- AI 气泡 -->
-      <div class="ai-bubble">
-        <div class="ai-bubble__logo">
+        <!-- 代码编辑器双品牌水印 -->
+        <div class="hero__co-brand-watermark">
           <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"></path>
           </svg>
+          <span class="sep">×</span>
+          <img class="iron-logo" src="ironspirit-logo.png" alt="IronSpirit">
         </div>
-        <span>由 TRAE 智能体生成</span>
       </div>
     </div>
   </div>
@@ -1158,6 +1275,14 @@ img { display: block; max-width: 100%; }
           去抽奖
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
         </a>
+        <!-- 双品牌水印 -->
+        <div class="lucky-card__co-brand">
+          <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"></path>
+          </svg>
+          <span class="sep">×</span>
+          <img class="iron-logo" src="ironspirit-logo.png" alt="IronSpirit">
+        </div>
       </div>
     </div>
   </div>
@@ -1170,7 +1295,12 @@ img { display: block; max-width: 100%; }
       <svg class="footer__brand-logo" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"></path>
       </svg>
-      <span>Powered by TraeWork Design System</span>
+      <span>Powered by TraeWork</span>
+      <span class="footer__brand-divider"></span>
+      <div class="footer__iron-brand">
+        <img class="iron-logo footer__iron-logo" src="ironspirit-logo.png" alt="IronSpirit">
+        <span>Presented by IronSpirit</span>
+      </div>
     </div>
     <div class="footer__links">
       <a href="#">关于铁人战队</a>
@@ -1180,6 +1310,8 @@ img { display: block; max-width: 100%; }
     <div class="footer__copy">© 2026 IronSpirit × TRAE. All rights reserved.</div>
   </div>
 </footer>
+
+
 
 
 
