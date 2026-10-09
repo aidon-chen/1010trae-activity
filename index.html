@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IronSpirit × TRAE · AI 挑战日</title>
@@ -670,8 +669,12 @@ img { display: block; max-width: 100%; }
   display: flex;
   gap: var(--sp-3);
 }
-.card__btn-secondary {
+.card__btn-row .card__btn,
+.card__btn-row .card__btn-secondary {
   flex: 1;
+  width: 0; /* 配合 flex:1 确保两按钮等宽 */
+}
+.card__btn-secondary {
   height: 36px;
   background: transparent;
   color: var(--text-secondary);
@@ -680,6 +683,9 @@ img { display: block; max-width: 100%; }
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-l1);
   transition: all .2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .card__btn-secondary:hover {
   background: var(--bg-secondary);
@@ -699,7 +705,7 @@ img { display: block; max-width: 100%; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--sp-16);
-  align-items: start;
+  align-items: stretch; /* 两列等高 */
 }
 
 .rules__list {
@@ -802,8 +808,8 @@ img { display: block; max-width: 100%; }
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  height: 40px;
-  padding: 0 var(--sp-8);
+  height: 45px;
+  padding: 0 calc(var(--sp-8) + 3px);
   background: white;
   color: var(--brand-600);
   font-size: 14px;
@@ -812,6 +818,7 @@ img { display: block; max-width: 100%; }
   transition: transform .15s ease, box-shadow .2s ease;
   position: relative;
   z-index: 1;
+  margin-top: 35px;
 }
 .lucky-card__btn:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
@@ -897,7 +904,7 @@ img { display: block; max-width: 100%; }
     <div class="nav__brand">
       <!-- TRAE Logo -->
       <svg class="nav__brand-logo" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"/>
+        <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"></path>
       </svg>
       <span>TraeDesign</span>
       <span class="nav__brand-sep"></span>
@@ -905,7 +912,7 @@ img { display: block; max-width: 100%; }
     </div>
     <a href="#challenges" class="nav__cta">
       立即挑战
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
     </a>
   </div>
 </nav>
@@ -930,10 +937,10 @@ img { display: block; max-width: 100%; }
       <div class="hero__cta-row">
         <a href="#challenges" class="btn-primary">
           开始挑战
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
         </a>
         <a href="#rules" class="btn-ghost">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
           活动规则
         </a>
       </div>
@@ -1018,7 +1025,7 @@ img { display: block; max-width: 100%; }
       <div class="ai-bubble">
         <div class="ai-bubble__logo">
           <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"/>
+            <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"></path>
           </svg>
         </div>
         <span>由 TRAE 智能体生成</span>
@@ -1049,9 +1056,9 @@ img { display: block; max-width: 100%; }
           <li class="card__feature">连续答对 5 题即可通关</li>
         </ul>
         <div class="card__reward">通关奖励：1 次抽奖机会</div>
-        <a href="quiz.html" class="card__btn">
+        <a href="quiz-proto.html" class="card__btn">
           开始挑战
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
         </a>
       </div>
 
@@ -1068,8 +1075,8 @@ img { display: block; max-width: 100%; }
         </ul>
         <div class="card__reward">简易版：1 次 · 困难版：2 次</div>
         <div class="card__btn-row">
-          <button class="card__btn-secondary">简易版</button>
-          <button class="card__btn" style="background: var(--card-accent)">困难版</button>
+          <a href="https://ai-or-human.github.io/" target="_blank" rel="noopener" class="card__btn-secondary" style="position: relative;">简易版</a>
+          <a href="https://adrienpavao.com/RealOrAI/" target="_blank" rel="noopener" class="card__btn" style="background: var(--card-accent)">困难版</a>
         </div>
       </div>
 
@@ -1085,9 +1092,9 @@ img { display: block; max-width: 100%; }
           <li class="card__feature">答对 6 题及格，全对有惊喜</li>
         </ul>
         <div class="card__reward">≥6 题：1 次 · 全对：2 次</div>
-        <a href="#" class="card__btn">
+        <a href="https://smartaiforbiz.com/ai-quiz/" target="_blank" rel="noopener" class="card__btn">
           开始答题
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
         </a>
       </div>
     </div>
@@ -1140,16 +1147,16 @@ img { display: block; max-width: 100%; }
       <div class="lucky-card">
         <div class="lucky-card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+            <circle cx="12" cy="12" r="3" fill="currentColor"></circle>
           </svg>
         </div>
         <div class="lucky-card__title">幸运大转盘</div>
         <div class="lucky-card__desc">已获取抽奖次数？<br>立即转动转盘，赢取 TraeWork 限量周边。</div>
         <a href="lucky-wheel.html" class="lucky-card__btn">
           去抽奖
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
         </a>
       </div>
     </div>
@@ -1161,7 +1168,7 @@ img { display: block; max-width: 100%; }
   <div class="container footer__inner">
     <div class="footer__brand">
       <svg class="footer__brand-logo" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"/>
+        <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"></path>
       </svg>
       <span>Powered by TraeWork Design System</span>
     </div>
@@ -1174,5 +1181,6 @@ img { display: block; max-width: 100%; }
   </div>
 </footer>
 
-</body>
-</html>
+
+
+</body></html>
