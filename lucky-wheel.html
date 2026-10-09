@@ -262,46 +262,43 @@
 
     <aside style="position: relative;">
       <div class="totals">
-        <div><div class="k">剩余奖签</div><div class="v" id="tRemain">198</div></div>
-        <div><div class="k">已抽次数</div><div class="v" id="tDrawn">2</div></div>
-        <div><div class="k">总中奖概率</div><div class="v" id="tWinRate" style="position: relative;">--</div></div>
+        <div><div class="k">剩余奖签</div><div class="v" id="tRemain">200</div></div>
+        <div><div class="k">已抽次数</div><div class="v" id="tDrawn">0</div></div>
+        <div><div class="k">总中奖概率</div><div class="v" id="tWinRate" style="position: relative;">29.0%</div></div>
       </div>
       <h2>各品类剩余 / 当前概率</h2>
-      <ul class="stock" id="stock"><li><span class="dot" style="background:#e5484d"></span>
+      <ul class="stock" id="stock"><li><span class="dot" style="background:#6C5CE7"></span>
       <span class="nm">单肩背包</span>
       <span class="rm">2</span>
-      <span class="pb">1.0%</span></li><li><span class="dot" style="background:#f5a524"></span>
+      <span class="pb">1.0%</span></li><li><span class="dot" style="background:#FFD3A5"></span>
       <span class="nm">马克杯</span>
       <span class="rm">5</span>
-      <span class="pb">2.5%</span></li><li><span class="dot" style="background:#f5d90a"></span>
+      <span class="pb">2.5%</span></li><li><span class="dot" style="background:#EF7BAE"></span>
       <span class="nm">笔记本</span>
-      <span class="rm">9</span>
-      <span class="pb">4.5%</span></li><li><span class="dot" style="background:#e93d82"></span>
-      <span class="nm">手办</span>
-      <span class="rm">1</span>
-      <span class="pb">0.5%</span></li><li><span class="dot" style="background:#30a46c"></span>
+      <span class="rm">10</span>
+      <span class="pb">5.0%</span></li><li><span class="dot" style="background:#46B5A4"></span>
       <span class="nm">TRAE宝手办</span>
-      <span class="rm">4</span>
-      <span class="pb">2.0%</span></li><li><span class="dot" style="background:#12a594"></span>
+      <span class="rm">5</span>
+      <span class="pb">2.5%</span></li><li><span class="dot" style="background:#BFE3F5"></span>
       <span class="nm">徽章</span>
       <span class="rm">2</span>
-      <span class="pb">1.0%</span></li><li><span class="dot" style="background:#0d74ce"></span>
+      <span class="pb">1.0%</span></li><li><span class="dot" style="background:#5D8DEE"></span>
       <span class="nm">钥匙扣</span>
       <span class="rm">3</span>
-      <span class="pb">1.5%</span></li><li><span class="dot" style="background:#46a758"></span>
+      <span class="pb">1.5%</span></li><li><span class="dot" style="background:#C9EBD4"></span>
       <span class="nm">按键挂件</span>
       <span class="rm">6</span>
-      <span class="pb">3.0%</span></li><li><span class="dot" style="background:#8e4ec6"></span>
+      <span class="pb">3.0%</span></li><li><span class="dot" style="background:#8D79D9"></span>
       <span class="nm">冰箱贴</span>
       <span class="rm">15</span>
-      <span class="pb">7.6%</span></li><li><span class="dot" style="background:#978365"></span>
+      <span class="pb">7.5%</span></li><li><span class="dot" style="background:#F2A65E"></span>
       <span class="nm">贴纸</span>
       <span class="rm">10</span>
-      <span class="pb">5.1%</span></li><li><span class="dot" style="background:#e5e5e5"></span>
+      <span class="pb">5.0%</span></li><li><span class="dot" style="background:#F4F1EA"></span>
       <span class="nm">谢谢参与</span>
-      <span class="rm">141</span>
-      <span class="pb">71.2%</span></li></ul>
-      <button class="btn wide" id="reset">重置奖池</button>
+      <span class="rm">142</span>
+      <span class="pb">71.0%</span></li></ul>
+      <button class="btn wide" id="reset" hidden style="position: relative;">重置奖池</button>
     </aside>
   </main>
 
@@ -326,13 +323,9 @@
      <input class="c-level" type="text" value="一等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="10">
      <input class="c-color" type="color" value="#EF7BAE">
-     <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="手办" placeholder="奖项名称">
-     <input class="c-level" type="text" value="一等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="1">
-     <input class="c-color" type="color" value="#FFF1B6">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="TRAE宝手办" placeholder="奖项名称">
      <input class="c-level" type="text" value="二等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="4">
+     <input class="c-count" type="number" min="0" step="1" value="5">
      <input class="c-color" type="color" value="#46B5A4">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="徽章" placeholder="奖项名称">
      <input class="c-level" type="text" value="二等奖" placeholder="如 一等奖">
@@ -699,12 +692,13 @@ document.getElementById('adminHead').addEventListener('click', (e) => {
   document.getElementById('toggleAdmin').click();
 });
 
-// 参数设置区默认隐藏，管理员按 Ctrl/Cmd+Shift+A 唤出或隐藏
+// 参数设置区与「重置奖池」按钮默认隐藏，管理员按 Ctrl/Cmd+Shift+A 一起唤出或隐藏
 document.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
     e.preventDefault();
     const admin = document.querySelector('.admin');
     admin.hidden = !admin.hidden;
+    document.getElementById('reset').hidden = admin.hidden;
     if (!admin.hidden) admin.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 });
@@ -736,6 +730,7 @@ renderRows();
 fitCanvas();
 renderStock();
 </script>
+
 
 
 
