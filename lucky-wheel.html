@@ -2,7 +2,7 @@
 <html lang="zh-CN"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>幸运转盘 · 抽奖</title>
+<title>幸运转盘 · 本地活动服务</title>
 <style>
   :root{
     /* TraeWork 浅色主题 + 活动氛围感 */
@@ -15,13 +15,13 @@
     --fg-2:#404040;
     --dim:#737373;
     --accent:#4b3fe3;
-    --accent-hover:#6366f1;
+    --accent-hover:#6a6fff;
     --accent-soft:rgba(75,63,227,0.08);
     --accent-soft-border:rgba(75,63,227,0.15);
     --warn:#e27900;
     --success:#0f9960;
     --error:#d9363f;
-    --radius-4: 4px;
+    --radius-4: 4px; --radius-6: 6px; --radius-10: 10px;
     --radius-8: 8px;
     --radius-12: 12px;
     --radius-16: 16px;
@@ -145,14 +145,14 @@
     box-shadow:var(--shadow-sm);
   }
   .totals{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-  .totals div{
+  .totals > div{
     background:var(--accent-soft);
     border:1px solid var(--accent-soft-border);
     border-radius:var(--radius-12);padding:14px;
   }
   .totals .k{font-size:12px;color:var(--dim)}
   /* 第 3 张卡片（总中奖概率）独占一行 */
-  .totals div:nth-child(3){grid-column:1/-1}
+  .totals > div:nth-child(3){grid-column:1/-1}
   .totals .v{
     font-size:28px;font-weight:700;margin-top:4px;
     font-family:"Inter","SF Pro Text",sans-serif;font-variant-numeric:tabular-nums;
@@ -222,6 +222,20 @@
   @media (prefers-reduced-motion:reduce){
     *{transition:none!important;animation:none!important}
   }
+  [hidden]{display:none!important}
+  a.btn{text-decoration:none;display:inline-block}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .service-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;color:var(--success);font-size:13px}
+  .offline{color:var(--error)}
+  .notice{border:1px solid var(--accent-soft-border);background:#f5f3ff;border-radius:16px;padding:16px;margin:0 0 18px}
+  .notice p{margin:0;font-size:14px;line-height:1.7}
+  .stock-note{color:var(--dim);font-size:12px;line-height:1.7;margin:14px 0 0}
+  .history-title{margin-top:22px}
+  .history{padding:0;margin:0;list-style:none;font-size:12px}
+  .history li{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--line);color:var(--dim)}
+  .history strong{color:var(--fg-2);font-weight:500}
+  .result .lv{letter-spacing:1px;line-height:1.6}
+  @media(max-width:540px){.grid-head,.prow{grid-template-columns:minmax(0,1fr) 78px 58px 36px 22px;gap:5px}.prow input{padding:8px 5px}.admin-head .hint{display:block;margin:6px 0 0;line-height:1.6}.top-nav__brand{font-size:12px}.top-nav>span{display:none}.service-bar{font-size:12px}.service-bar .btn{white-space:nowrap}.admin-body{padding:0 12px 16px}}
 </style>
 </head>
 <body>
@@ -250,486 +264,56 @@
     <div class="sub" id="sub">200 张奖签 · 不放回 · 抽完即止</div>
   </header>
 
+  <div class="service-bar"><span id="serviceStatus" role="status">正在连接本地服务…</span><button class="btn" id="manage" type="button">管理奖池</button></div>
+  <section id="legacyNotice" class="notice" hidden>
+    <p id="legacyMessage"></p>
+    <div class="admin-actions"><button class="btn" id="exportLegacy">导出旧缓存备份</button><button class="btn primary" id="importLegacy">迁移旧记录并继续</button><button class="btn" id="keepNew">核对后使用服务器奖池</button></div>
+  </section>
   <main>
     <section style="position: relative;">
       <div class="stage">
         <div class="pointer"></div>
         <canvas id="wheel" width="1280" height="1280"></canvas>
-        <button id="spin">抽奖</button>
+        <button id="spin" disabled>抽奖</button>
       </div>
-      <div class="result" id="result" style="position: relative;"><div class="lv">一等奖</div><div class="name" style="color:#f5d90a">笔记本</div></div>
+      <div class="result empty" id="result" role="status" aria-live="polite"><div class="name">正在连接本地服务…</div></div>
     </section>
 
     <aside style="position: relative;">
       <div class="totals">
-        <div><div class="k">剩余奖签</div><div class="v" id="tRemain">200</div></div>
-        <div><div class="k">已抽次数</div><div class="v" id="tDrawn">0</div></div>
-        <div><div class="k">总中奖概率</div><div class="v" id="tWinRate" style="position: relative;">29.0%</div></div>
+        <div><div class="k">剩余奖签</div><div class="v" id="tRemain">—</div></div>
+        <div><div class="k">已抽次数</div><div class="v" id="tDrawn">—</div></div>
+        <div><div class="k">总中奖概率</div><div class="v" id="tWinRate" style="position: relative;">—</div></div>
       </div>
       <h2>各品类剩余 / 当前概率</h2>
-      <ul class="stock" id="stock"><li><span class="dot" style="background:#6C5CE7"></span>
-      <span class="nm">单肩背包</span>
-      <span class="rm">2</span>
-      <span class="pb">1.0%</span></li><li><span class="dot" style="background:#FFD3A5"></span>
-      <span class="nm">马克杯</span>
-      <span class="rm">5</span>
-      <span class="pb">2.5%</span></li><li><span class="dot" style="background:#EF7BAE"></span>
-      <span class="nm">笔记本</span>
-      <span class="rm">10</span>
-      <span class="pb">5.0%</span></li><li><span class="dot" style="background:#46B5A4"></span>
-      <span class="nm">TRAE宝手办</span>
-      <span class="rm">5</span>
-      <span class="pb">2.5%</span></li><li><span class="dot" style="background:#BFE3F5"></span>
-      <span class="nm">徽章</span>
-      <span class="rm">2</span>
-      <span class="pb">1.0%</span></li><li><span class="dot" style="background:#5D8DEE"></span>
-      <span class="nm">钥匙扣</span>
-      <span class="rm">3</span>
-      <span class="pb">1.5%</span></li><li><span class="dot" style="background:#C9EBD4"></span>
-      <span class="nm">按键挂件</span>
-      <span class="rm">6</span>
-      <span class="pb">3.0%</span></li><li><span class="dot" style="background:#8D79D9"></span>
-      <span class="nm">冰箱贴</span>
-      <span class="rm">15</span>
-      <span class="pb">7.5%</span></li><li><span class="dot" style="background:#F2A65E"></span>
-      <span class="nm">贴纸</span>
-      <span class="rm">10</span>
-      <span class="pb">5.0%</span></li><li><span class="dot" style="background:#F4F1EA"></span>
-      <span class="nm">谢谢参与</span>
-      <span class="rm">142</span>
-      <span class="pb">71.0%</span></li></ul>
-      <button class="btn wide" id="reset" hidden style="position: relative;">重置奖池</button>
+      <ul class="stock" id="stock"><li>正在连接本地服务…</li></ul>
+      <p class="stock-note">扇区用于展示，实际概率按剩余奖签计算。</p>
+      <h2 class="history-title">最近抽奖记录</h2><ul class="history" id="history"><li>暂无记录</li></ul>
+      <button class="btn wide" id="reset" hidden style="position: relative;">按文档新建奖池</button>
     </aside>
   </main>
 
   <section class="admin" hidden="">
     <div class="admin-head" id="adminHead" style="position: relative;">
-      <h2>参数设置<span class="hint">管理人员可修改奖项名称、等级、数量与颜色</span></h2>
+      <h2>参数设置<span class="hint">旧奖池与记录保留；请核对实物库存后新建</span></h2>
       <button class="btn" id="toggleAdmin" type="button">展开</button>
     </div>
     <div class="admin-body" id="adminBody" hidden="">
       <div class="grid-head">
         <span>奖项名称</span><span>等级</span><span>数量</span><span>颜色</span><span></span>
       </div>
-      <div id="rows"><div class="prow"><input class="c-name" type="text" value="单肩背包" placeholder="奖项名称">
-     <input class="c-level" type="text" value="特等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="2">
-     <input class="c-color" type="color" value="#6C5CE7">
-     <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="马克杯" placeholder="奖项名称">
-     <input class="c-level" type="text" value="一等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="5">
-     <input class="c-color" type="color" value="#FFD3A5">
-     <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="笔记本" placeholder="奖项名称">
-     <input class="c-level" type="text" value="一等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="10">
-     <input class="c-color" type="color" value="#EF7BAE">
-     <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="TRAE宝手办" placeholder="奖项名称">
-     <input class="c-level" type="text" value="二等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="5">
-     <input class="c-color" type="color" value="#46B5A4">
-     <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="徽章" placeholder="奖项名称">
-     <input class="c-level" type="text" value="二等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="2">
-     <input class="c-color" type="color" value="#BFE3F5">
-     <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="钥匙扣" placeholder="奖项名称">
-     <input class="c-level" type="text" value="二等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="3">
-     <input class="c-color" type="color" value="#5D8DEE">
-     <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="按键挂件" placeholder="奖项名称">
-     <input class="c-level" type="text" value="二等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="6">
-     <input class="c-color" type="color" value="#C9EBD4">
-     <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="冰箱贴" placeholder="奖项名称">
-     <input class="c-level" type="text" value="三等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="15">
-     <input class="c-color" type="color" value="#8D79D9">
-     <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="贴纸" placeholder="奖项名称">
-     <input class="c-level" type="text" value="三等奖" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="10">
-     <input class="c-color" type="color" value="#F2A65E">
-     <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="谢谢参与" placeholder="奖项名称">
-     <input class="c-level" type="text" value="" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="142">
-     <input class="c-color" type="color" value="#F4F1EA">
-     <button class="del" type="button" title="删除">✕</button></div></div>
-      <div class="admin-actions">
+      <div id="rows"></div><div class="admin-actions">
         <button class="btn" id="addRow" type="button">+ 新增奖项</button>
-        <button class="btn primary" id="apply" type="button">保存并重制奖池</button>
+        <button class="btn primary" id="apply" type="button">保存为新奖池</button>
         <span class="sum" id="sumHint">合计 <b>200</b> 张奖签</span>
       </div>
+      <div class="admin-actions"><a class="btn" href="/api/export.csv" download>导出全部抽奖记录</a><button class="btn" id="backup" type="button">备份数据库</button></div>
+      <p class="stock-note">按 Ctrl + Shift + A 也可打开管理区。服务仅限本机，管理区供现场操作人员使用。新建奖池会切换库存，历史记录全部保留。</p>
     </div>
   </section>
 </div>
 
-<script>
-/* 默认奖项配置（数量之和即全场奖签总数，默认 200）—— 深浅交替的柔和配色，相邻扇区对比清晰 */
-const DEFAULT_PRIZES = [
-  { name:'单肩背包',   level:'特等奖', count:2,   color:'#6C5CE7' },
-  { name:'马克杯',     level:'一等奖', count:5,   color:'#FFD3A5' },
-  { name:'笔记本',     level:'一等奖', count:10,  color:'#EF7BAE' },
-  { name:'TRAE宝手办', level:'二等奖', count:5,   color:'#46B5A4' },
-  { name:'徽章',       level:'二等奖', count:2,   color:'#BFE3F5' },
-  { name:'钥匙扣',     level:'二等奖', count:3,   color:'#5D8DEE' },
-  { name:'按键挂件',   level:'二等奖', count:6,   color:'#C9EBD4' },
-  { name:'冰箱贴',     level:'三等奖', count:15,  color:'#8D79D9' },
-  { name:'贴纸',       level:'三等奖', count:10,  color:'#F2A65E' },
-  { name:'谢谢参与',   level:'',       count:142, color:'#F4F1EA' }
-];
-const PALETTE = ['#6C5CE7','#FFD3A5','#EF7BAE','#FFF1B6','#46B5A4','#BFE3F5','#5D8DEE','#C9EBD4','#8D79D9','#F2A65E'];
-
-/* v4：2026-10 「手办」并入「TRAE宝手办」（二等奖 5个），旧缓存参数作废 */
-const PARAM_KEY = 'ironspirit_wheel_params_v4';
-const STORE_KEY = 'ironspirit_wheel_v2';
-
-const canvas   = document.getElementById('wheel');
-const ctx      = canvas.getContext('2d');
-const spinBtn  = document.getElementById('spin');
-const resultEl = document.getElementById('result');
-const stockEl  = document.getElementById('stock');
-const tRemain  = document.getElementById('tRemain');
-const tDrawn   = document.getElementById('tDrawn');
-const tWinRate = document.getElementById('tWinRate');
-const rowsEl   = document.getElementById('rows');
-const sumHint  = document.getElementById('sumHint');
-const subEl    = document.getElementById('sub');
-
-let PRIZES = loadParams();
-let state  = { deck: [], drawn: [] };   // deck：剩余奖签（已洗牌）；drawn：已抽记录
-let rotation = 0;                       // 转盘当前角度（顺时针，度）
-let spinning = false;
-
-/* ---------- 参数存取 ---------- */
-function loadParams(){
-  try{
-    const raw = localStorage.getItem(PARAM_KEY);
-    if (raw){
-      const arr = JSON.parse(raw);
-      if (Array.isArray(arr) && arr.length) return arr.map(normalize);
-    }
-  }catch(e){}
-  return DEFAULT_PRIZES.map(normalize);
-}
-function normalize(p){
-  return {
-    name : String(p.name ?? '').trim() || '未命名',
-    level: String(p.level ?? '').trim(),
-    count: Math.max(0, parseInt(p.count, 10) || 0),
-    color: /^#[0-9a-fA-F]{6}$/.test(p.color) ? p.color : '#8e4ec6'
-  };
-}
-function saveParams(){
-  try{ localStorage.setItem(PARAM_KEY, JSON.stringify(PRIZES)); }catch(e){}
-}
-function totalTickets(){ return PRIZES.reduce((s,p) => s + p.count, 0); }
-
-/* ---------- 奖池 ---------- */
-function buildDeck(){
-  const d = [];
-  PRIZES.forEach(p => { for (let i = 0; i < p.count; i++) d.push(p.name); });
-  // Fisher-Yates：奖签充分混匀
-  for (let i = d.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [d[i], d[j]] = [d[j], d[i]];
-  }
-  return d;
-}
-function saveState(){
-  try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
-}
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STORE_KEY);
-    if (!raw) return false;
-    const s = JSON.parse(raw);
-    if (!Array.isArray(s.deck) || !Array.isArray(s.drawn)) return false;
-    state = s;
-    return true;
-  }catch(e){ return false; }
-}
-/* 用名称作为奖签标识；参数变动后旧奖池作废 */
-function stateMatchesParams(){
-  const names = new Set(PRIZES.map(p => p.name));
-  return state.deck.every(n => names.has(n)) && state.drawn.every(n => names.has(n));
-}
-function rebuildDeck(){
-  state = { deck: buildDeck(), drawn: [] };
-  saveState();
-  clearResult();
-  renderStock();
-}
-
-/* ---------- 绘制 ---------- */
-function render(){
-  const w = canvas.width, h = canvas.height;
-  const cx = w / 2, cy = h / 2;
-  const R = Math.min(w, h) / 2 - 4;
-  const n = PRIZES.length;
-
-  ctx.clearRect(0, 0, w, h);
-  if (n === 0){
-    ctx.fillStyle = '#f5f5f5';
-    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
-    return;
-  }
-
-  const seg = 2 * Math.PI / n;
-  const start0 = -Math.PI / 2;            // 0° 指向正上方，与指针一致
-  const rad = rotation * Math.PI / 180;
-
-  for (let i = 0; i < n; i++){
-    const p = PRIZES[i];
-    const a1 = start0 + i * seg + rad;
-    const a2 = a1 + seg;
-
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.arc(cx, cy, R, a1, a2);
-    ctx.closePath();
-    ctx.fillStyle = p.color;
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,.8)';
-    ctx.lineWidth = Math.max(1, R * 0.006);
-    ctx.stroke();
-
-    // 文字沿半径方向排布
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(a1 + seg / 2);
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    const dark = isDark(p.color);
-    const fg = dark ? '#ffffff' : '#12151c';
-    if (p.level){
-      ctx.font = `${Math.round(R * 0.055)}px sans-serif`;
-      ctx.globalAlpha = .78;
-      ctx.fillStyle = fg;
-      ctx.fillText(p.level, R * 0.88, -R * 0.075);
-      ctx.globalAlpha = 1;
-    }
-    ctx.font = `700 ${Math.round(R * 0.078)}px sans-serif`;
-    ctx.fillStyle = fg;
-    ctx.fillText(p.name, R * 0.88, p.level ? R * 0.045 : 0);
-    ctx.restore();
-  }
-
-  ctx.beginPath();
-  ctx.arc(cx, cy, R, 0, Math.PI * 2);
-  ctx.strokeStyle = '#4b3fe3';
-  ctx.lineWidth = Math.max(2, R * 0.022);
-  ctx.stroke();
-}
-function isDark(hex){
-  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
-  return (0.299*r + 0.587*g + 0.114*b) < 150;
-}
-function fitCanvas(){
-  const rect = canvas.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width  = Math.max(1, Math.round(rect.width  * dpr));
-  canvas.height = Math.max(1, Math.round(rect.height * dpr));
-  render();
-}
-
-/* ---------- 面板 ---------- */
-function remainingMap(){
-  const m = {};
-  PRIZES.forEach(p => m[p.name] = 0);
-  state.deck.forEach(n => { if (m[n] !== undefined) m[n]++; });
-  return m;
-}
-function clearResult(){
-  resultEl.className = 'result empty';
-  resultEl.innerHTML = '<div class="name">点击中间按钮开始抽奖</div>';
-}
-function renderStock(){
-  const m = remainingMap();
-  const left = state.deck.length;
-  const total = totalTickets();
-
-  tRemain.textContent = left;
-  tDrawn.textContent  = state.drawn.length;
-  subEl.textContent   = `${total} 张奖签 · 不放回 · 抽完即止`;
-
-  // 总中奖概率 = 所有有等级的奖项剩余签数 / 剩余总签数（level 为空视为"谢谢参与"，不计入）
-  const winLeft = PRIZES.reduce((s, p) => p.level ? s + (m[p.name] || 0) : s, 0);
-  tWinRate.textContent = left > 0 ? (winLeft / left * 100).toFixed(1) + '%' : '--';
-
-  stockEl.innerHTML = '';
-  PRIZES.forEach(p => {
-    const rm = m[p.name];
-    // 当前概率 = 该品类剩余签数 / 剩余总签数，每抽一次都会变化
-    const pb = left > 0 ? (rm / left * 100) : 0;
-    const li = document.createElement('li');
-    if (rm === 0) li.className = 'out';
-    li.innerHTML = `<span class="dot" style="background:${p.color}"></span>
-      <span class="nm">${escapeHtml(p.name)}</span>
-      <span class="rm">${rm}</span>
-      <span class="pb">${pb.toFixed(1)}%</span>`;
-    stockEl.appendChild(li);
-  });
-
-  const empty = left === 0;
-  spinBtn.disabled = empty || spinning || total === 0;
-  if (total === 0){
-    resultEl.className = 'result empty';
-    resultEl.innerHTML = '<div class="name">奖池为空，请先在下方设置奖项数量</div>';
-  } else if (empty){
-    resultEl.className = 'result empty';
-    resultEl.innerHTML = '<div class="name">奖签已全部抽完</div>';
-  }
-}
-function escapeHtml(s){
-  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-/* ---------- 抽奖 ---------- */
-function animateTo(target, dur){
-  const from = rotation, t0 = performance.now();
-  return new Promise(resolve => {
-    function frame(t){
-      const k = Math.min(1, (t - t0) / dur);
-      const e = 1 - Math.pow(1 - k, 3);           // easeOutCubic
-      rotation = from + (target - from) * e;
-      render();
-      k < 1 ? requestAnimationFrame(frame) : resolve();
-    }
-    requestAnimationFrame(frame);
-  });
-}
-
-async function spin(){
-  if (spinning || state.deck.length === 0 || PRIZES.length === 0) return;
-
-  spinning = true;
-  spinBtn.disabled = true;
-
-  // 不放回：先定中奖奖签，再从奖池移除
-  const name = state.deck.pop();
-  state.drawn.push(name);
-  saveState();
-
-  const idx = PRIZES.findIndex(p => p.name === name);
-  if (idx < 0){ spinning = false; renderStock(); return; }
-  const p = PRIZES[idx];
-
-  const segDeg = 360 / PRIZES.length;
-  // 指针在正上方：让该扇区中心停到指针处；jitter 保证落点在扇区内而非压线
-  const jitter  = (Math.random() * 2 - 1) * (segDeg * 0.33);
-  const wantMod = ((-(idx * segDeg + segDeg / 2) + jitter) % 360 + 360) % 360;
-  const curMod  = ((rotation % 360) + 360) % 360;
-  const target  = rotation + 360 * 6 + ((wantMod - curMod) + 360) % 360;
-
-  await animateTo(target, 4200);
-
-  resultEl.className = 'result';
-  resultEl.innerHTML =
-    (p.level ? `<div class="lv">${escapeHtml(p.level)}</div>` : '') +
-    `<div class="name" style="color:${p.color}">${escapeHtml(p.name)}</div>`;
-
-  spinning = false;
-  renderStock();
-}
-
-/* ---------- 参数设置 UI ---------- */
-function renderRows(){
-  rowsEl.innerHTML = '';
-  PRIZES.forEach((p, i) => rowsEl.appendChild(makeRow(p, i)));
-  updateSum();
-}
-function makeRow(p, i){
-  const row = document.createElement('div');
-  row.className = 'prow';
-  row.innerHTML =
-    `<input class="c-name"  type="text"   value="${escapeHtml(p.name)}"  placeholder="奖项名称">
-     <input class="c-level" type="text"   value="${escapeHtml(p.level)}" placeholder="如 一等奖">
-     <input class="c-count" type="number" min="0" step="1" value="${p.count}">
-     <input class="c-color" type="color"  value="${p.color}">
-     <button class="del" type="button" title="删除">✕</button>`;
-  row.querySelector('.del').addEventListener('click', () => {
-    if (PRIZES.length <= 1){ alert('至少保留一个奖项'); return; }
-    collectRows();
-    PRIZES.splice(i, 1);
-    renderRows();
-  });
-  row.querySelectorAll('input').forEach(el => el.addEventListener('input', () => { collectRows(); updateSum(); }));
-  return row;
-}
-/* 把表格里的草稿读回 PRIZES（未保存到 localStorage） */
-function collectRows(){
-  const list = [];
-  rowsEl.querySelectorAll('.prow').forEach(row => {
-    list.push(normalize({
-      name : row.querySelector('.c-name').value,
-      level: row.querySelector('.c-level').value,
-      count: row.querySelector('.c-count').value,
-      color: row.querySelector('.c-color').value
-    }));
-  });
-  if (list.length) PRIZES = list;
-}
-function updateSum(){
-  const total = totalTickets();
-  sumHint.className = 'sum' + (total === 0 ? ' bad' : '');
-  sumHint.innerHTML = total === 0 ? '合计 <b>0</b> 张' : `合计 <b>${total}</b> 张奖签`;
-}
-
-/* ---------- 事件 ---------- */
-spinBtn.addEventListener('click', spin);
-
-document.getElementById('reset').addEventListener('click', () => {
-  if (spinning) return;
-  if (!confirm(`重置奖池？将按当前参数重新生成 ${totalTickets()} 张奖签并清空已抽记录。`)) return;
-  rebuildDeck();
-});
-
-document.getElementById('toggleAdmin').addEventListener('click', () => {
-  const body = document.getElementById('adminBody');
-  body.hidden = !body.hidden;
-  document.getElementById('toggleAdmin').textContent = body.hidden ? '展开' : '收起';
-});
-document.getElementById('adminHead').addEventListener('click', (e) => {
-  if (e.target.closest('#toggleAdmin')) return;
-  document.getElementById('toggleAdmin').click();
-});
-
-// 参数设置区与「重置奖池」按钮默认隐藏，管理员按 Ctrl/Cmd+Shift+A 一起唤出或隐藏
-document.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-    e.preventDefault();
-    const admin = document.querySelector('.admin');
-    admin.hidden = !admin.hidden;
-    document.getElementById('reset').hidden = admin.hidden;
-    if (!admin.hidden) admin.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-});
-
-document.getElementById('addRow').addEventListener('click', () => {
-  collectRows();
-  PRIZES.push({ name:'新奖项', level:'', count:1, color: PALETTE[PRIZES.length % PALETTE.length] });
-  renderRows();
-});
-
-document.getElementById('apply').addEventListener('click', () => {
-  if (spinning) return;
-  collectRows();
-  if (!PRIZES.length || totalTickets() === 0){ alert('请至少设置一个数量大于 0 的奖项'); return; }
-  if (!confirm(`保存参数并重制奖池？将生成 ${totalTickets()} 张奖签并清空已抽记录。`)) return;
-  saveParams();
-  rebuildDeck();
-  renderRows();
-});
-
-window.addEventListener('resize', fitCanvas);
-
-/* ---------- 初始化 ---------- */
-if (!loadState() || !stateMatchesParams() || state.deck.length + state.drawn.length !== totalTickets()){
-  state = { deck: buildDeck(), drawn: [] };
-  saveState();
-}
-renderRows();
-fitCanvas();
-renderStock();
-</script>
+<script src="wheel.js" defer></script>
 
 
 

@@ -4,3 +4,6 @@
 ironspirit-activity.design
 trae活动统一风格.design/
 quiz.html
+data/
+node_modules/
+*.log
