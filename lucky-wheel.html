@@ -89,7 +89,7 @@
   main > section:first-child{margin-top:20px}
 
   /* ---------- 转盘 ---------- */
-  .stage{position:relative;width:100%;max-width:480px;margin:0 auto}
+  .stage{position:relative;width:100%;max-width:640px;margin:0 auto}
   .stage::before{content:"";display:block;padding-top:100%}
   #wheel{
     position:absolute;top:0;left:0;width:100%;height:100%;display:block;
@@ -117,7 +117,7 @@
 
   /* ---------- 结果 ---------- */
   .result{
-    margin:22px auto 0;max-width:480px;text-align:center;
+    margin:22px auto 0;max-width:640px;text-align:center;
     background:rgba(255,255,255,0.6);
     backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
     border:1px solid rgba(255,255,255,0.5);
@@ -151,6 +151,8 @@
     border-radius:var(--radius-12);padding:14px;
   }
   .totals .k{font-size:12px;color:var(--dim)}
+  /* 第 3 张卡片（总中奖概率）独占一行 */
+  .totals div:nth-child(3){grid-column:1/-1}
   .totals .v{
     font-size:28px;font-weight:700;margin-top:4px;
     font-family:"Inter","SF Pro Text",sans-serif;font-variant-numeric:tabular-nums;
@@ -233,35 +235,36 @@
 <div class="app">
   <!-- 顶部导航 -->
   <nav class="top-nav">
-    <a href="index.html" class="top-nav__back">
+    <a href="home.html" class="top-nav__back">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"></path></svg>
       返回活动主页
     </a>
     <div class="top-nav__brand">
       <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" style="color:#4b3fe3"><path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"></path></svg>
-      <span>TraeDesign · 幸运转盘</span>
+      <span>Trae · 幸运转盘</span>
     </div>
     <span style="width:92px"></span>
   </nav>
   <header>
     <h1>幸运大转盘</h1>
-    <span class="sub" id="sub">200 张奖签 · 不放回 · 抽完即止</span>
+    <div class="sub" id="sub">200 张奖签 · 不放回 · 抽完即止</div>
   </header>
 
   <main>
     <section style="position: relative;">
       <div class="stage">
         <div class="pointer"></div>
-        <canvas id="wheel" width="480" height="480"></canvas>
+        <canvas id="wheel" width="1280" height="1280"></canvas>
         <button id="spin">抽奖</button>
       </div>
       <div class="result" id="result" style="position: relative;"><div class="lv">一等奖</div><div class="name" style="color:#f5d90a">笔记本</div></div>
     </section>
 
-    <aside>
+    <aside style="position: relative;">
       <div class="totals">
         <div><div class="k">剩余奖签</div><div class="v" id="tRemain">198</div></div>
         <div><div class="k">已抽次数</div><div class="v" id="tDrawn">2</div></div>
+        <div><div class="k">总中奖概率</div><div class="v" id="tWinRate" style="position: relative;">--</div></div>
       </div>
       <h2>各品类剩余 / 当前概率</h2>
       <ul class="stock" id="stock"><li><span class="dot" style="background:#e5484d"></span>
@@ -302,7 +305,7 @@
     </aside>
   </main>
 
-  <section class="admin">
+  <section class="admin" hidden="">
     <div class="admin-head" id="adminHead" style="position: relative;">
       <h2>参数设置<span class="hint">管理人员可修改奖项名称、等级、数量与颜色</span></h2>
       <button class="btn" id="toggleAdmin" type="button">展开</button>
@@ -314,47 +317,47 @@
       <div id="rows"><div class="prow"><input class="c-name" type="text" value="单肩背包" placeholder="奖项名称">
      <input class="c-level" type="text" value="特等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="2">
-     <input class="c-color" type="color" value="#e5484d">
+     <input class="c-color" type="color" value="#6C5CE7">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="马克杯" placeholder="奖项名称">
      <input class="c-level" type="text" value="一等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="5">
-     <input class="c-color" type="color" value="#f5a524">
+     <input class="c-color" type="color" value="#FFD3A5">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="笔记本" placeholder="奖项名称">
      <input class="c-level" type="text" value="一等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="10">
-     <input class="c-color" type="color" value="#f5d90a">
+     <input class="c-color" type="color" value="#EF7BAE">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="手办" placeholder="奖项名称">
      <input class="c-level" type="text" value="一等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="1">
-     <input class="c-color" type="color" value="#e93d82">
+     <input class="c-color" type="color" value="#FFF1B6">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="TRAE宝手办" placeholder="奖项名称">
      <input class="c-level" type="text" value="二等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="4">
-     <input class="c-color" type="color" value="#30a46c">
+     <input class="c-color" type="color" value="#46B5A4">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="徽章" placeholder="奖项名称">
      <input class="c-level" type="text" value="二等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="2">
-     <input class="c-color" type="color" value="#12a594">
+     <input class="c-color" type="color" value="#BFE3F5">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="钥匙扣" placeholder="奖项名称">
      <input class="c-level" type="text" value="二等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="3">
-     <input class="c-color" type="color" value="#0d74ce">
+     <input class="c-color" type="color" value="#5D8DEE">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="按键挂件" placeholder="奖项名称">
      <input class="c-level" type="text" value="二等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="6">
-     <input class="c-color" type="color" value="#46a758">
+     <input class="c-color" type="color" value="#C9EBD4">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="冰箱贴" placeholder="奖项名称">
      <input class="c-level" type="text" value="三等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="15">
-     <input class="c-color" type="color" value="#8e4ec6">
+     <input class="c-color" type="color" value="#8D79D9">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="贴纸" placeholder="奖项名称">
      <input class="c-level" type="text" value="三等奖" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="10">
-     <input class="c-color" type="color" value="#978365">
+     <input class="c-color" type="color" value="#F2A65E">
      <button class="del" type="button" title="删除">✕</button></div><div class="prow"><input class="c-name" type="text" value="谢谢参与" placeholder="奖项名称">
      <input class="c-level" type="text" value="" placeholder="如 一等奖">
      <input class="c-count" type="number" min="0" step="1" value="142">
-     <input class="c-color" type="color" value="#e5e5e5">
+     <input class="c-color" type="color" value="#F4F1EA">
      <button class="del" type="button" title="删除">✕</button></div></div>
       <div class="admin-actions">
         <button class="btn" id="addRow" type="button">+ 新增奖项</button>
@@ -366,24 +369,23 @@
 </div>
 
 <script>
-/* 默认奖项配置（数量之和即全场奖签总数，默认 200） */
+/* 默认奖项配置（数量之和即全场奖签总数，默认 200）—— 深浅交替的柔和配色，相邻扇区对比清晰 */
 const DEFAULT_PRIZES = [
-  { name:'单肩背包',   level:'特等奖', count:2,   color:'#e5484d' },
-  { name:'马克杯',     level:'一等奖', count:5,   color:'#f5a524' },
-  { name:'笔记本',     level:'一等奖', count:10,  color:'#f5d90a' },
-  { name:'手办',       level:'一等奖', count:1,   color:'#e93d82' },
-  { name:'TRAE宝手办', level:'二等奖', count:4,   color:'#30a46c' },
-  { name:'徽章',       level:'二等奖', count:2,   color:'#12a594' },
-  { name:'钥匙扣',     level:'二等奖', count:3,   color:'#0d74ce' },
-  { name:'按键挂件',   level:'二等奖', count:6,   color:'#46a758' },
-  { name:'冰箱贴',     level:'三等奖', count:15,  color:'#8e4ec6' },
-  { name:'贴纸',       level:'三等奖', count:10,  color:'#978365' },
-  { name:'谢谢参与',   level:'',       count:142, color:'#e5e5e5' }
+  { name:'单肩背包',   level:'特等奖', count:2,   color:'#6C5CE7' },
+  { name:'马克杯',     level:'一等奖', count:5,   color:'#FFD3A5' },
+  { name:'笔记本',     level:'一等奖', count:10,  color:'#EF7BAE' },
+  { name:'TRAE宝手办', level:'二等奖', count:5,   color:'#46B5A4' },
+  { name:'徽章',       level:'二等奖', count:2,   color:'#BFE3F5' },
+  { name:'钥匙扣',     level:'二等奖', count:3,   color:'#5D8DEE' },
+  { name:'按键挂件',   level:'二等奖', count:6,   color:'#C9EBD4' },
+  { name:'冰箱贴',     level:'三等奖', count:15,  color:'#8D79D9' },
+  { name:'贴纸',       level:'三等奖', count:10,  color:'#F2A65E' },
+  { name:'谢谢参与',   level:'',       count:142, color:'#F4F1EA' }
 ];
-const PALETTE = ['#e5484d','#f5a524','#f5d90a','#30a46c','#12a594','#0d74ce','#8e4ec6','#e93d82','#46a758','#978365'];
+const PALETTE = ['#6C5CE7','#FFD3A5','#EF7BAE','#FFF1B6','#46B5A4','#BFE3F5','#5D8DEE','#C9EBD4','#8D79D9','#F2A65E'];
 
-/* v2：2026-10 奖品方案更新（笔记本 10、新增手办/按键挂件/贴纸，谢谢参与 142），旧缓存作废 */
-const PARAM_KEY = 'ironspirit_wheel_params_v2';
+/* v4：2026-10 「手办」并入「TRAE宝手办」（二等奖 5个），旧缓存参数作废 */
+const PARAM_KEY = 'ironspirit_wheel_params_v4';
 const STORE_KEY = 'ironspirit_wheel_v2';
 
 const canvas   = document.getElementById('wheel');
@@ -393,6 +395,7 @@ const resultEl = document.getElementById('result');
 const stockEl  = document.getElementById('stock');
 const tRemain  = document.getElementById('tRemain');
 const tDrawn   = document.getElementById('tDrawn');
+const tWinRate = document.getElementById('tWinRate');
 const rowsEl   = document.getElementById('rows');
 const sumHint  = document.getElementById('sumHint');
 const subEl    = document.getElementById('sub');
@@ -491,7 +494,7 @@ function render(){
     ctx.closePath();
     ctx.fillStyle = p.color;
     ctx.fill();
-    ctx.strokeStyle = 'rgba(0,0,0,.28)';
+    ctx.strokeStyle = 'rgba(255,255,255,.8)';
     ctx.lineWidth = Math.max(1, R * 0.006);
     ctx.stroke();
 
@@ -553,6 +556,10 @@ function renderStock(){
   tRemain.textContent = left;
   tDrawn.textContent  = state.drawn.length;
   subEl.textContent   = `${total} 张奖签 · 不放回 · 抽完即止`;
+
+  // 总中奖概率 = 所有有等级的奖项剩余签数 / 剩余总签数（level 为空视为"谢谢参与"，不计入）
+  const winLeft = PRIZES.reduce((s, p) => p.level ? s + (m[p.name] || 0) : s, 0);
+  tWinRate.textContent = left > 0 ? (winLeft / left * 100).toFixed(1) + '%' : '--';
 
   stockEl.innerHTML = '';
   PRIZES.forEach(p => {
@@ -692,6 +699,16 @@ document.getElementById('adminHead').addEventListener('click', (e) => {
   document.getElementById('toggleAdmin').click();
 });
 
+// 参数设置区默认隐藏，管理员按 Ctrl/Cmd+Shift+A 唤出或隐藏
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+    e.preventDefault();
+    const admin = document.querySelector('.admin');
+    admin.hidden = !admin.hidden;
+    if (!admin.hidden) admin.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+});
+
 document.getElementById('addRow').addEventListener('click', () => {
   collectRows();
   PRIZES.push({ name:'新奖项', level:'', count:1, color: PALETTE[PRIZES.length % PALETTE.length] });
@@ -719,6 +736,11 @@ renderRows();
 fitCanvas();
 renderStock();
 </script>
+
+
+
+
+
 
 
 
