@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IronSpirit × TRAE · AI 挑战日</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   TraeWork Design System — CSS Variables
+   核心 token 对齐 TraeWork 设计系统
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  /* Brand — 主品牌色紫靛 */
+  --brand-600: #4b3fe3;
+  --brand-500: #6a6fff;
+  --brand-700: #3f31c6;
+  --brand-300: #aab7ff;
+  --brand-100: #e5eaff;
+  --brand-50:  #f2f7ff;
+  --brand-900: #1a1759;
+
+  /* Accent — 辅助强调色 */
+  --accent-coral:   #ff6b45;
+  --accent-teal:    #00b983;
+  --accent-amber:   #f2a90c;
+  --accent-cyan:    #00b6f5;
+  --accent-violet:  #9570ff;
+  --accent-magenta: #f53cff;
+
+  /* Background */
+  --bg-default:   #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-tertiary:  #e5e5e5;
+  --bg-overlay-l1: rgba(115,115,115,0.08);
+  --bg-overlay-l2: rgba(115,115,115,0.12);
+
+  /* Text */
+  --text-default:   #171717;
+  --text-secondary: #404040;
+  --text-tertiary:  #737373;
+  --text-disabled:  #a1a1a1;
+  --text-on-brand:  #ffffff;
+
+  /* Border */
+  --border-l1: rgba(115,115,115,0.12);
+  --border-l2: rgba(115,115,115,0.18);
+  --border-l3: rgba(115,115,115,0.36);
+  --border-brand: #4b3fe3;
+
+  /* Code syntax */
+  --code-text:        #17181a;
+  --code-doc:         #8393a3;
+  --code-link:        #2f74ff;
+  --code-number:      #e54595;
+  --code-action:      #5f36b2;
+  --code-instruction: #b15ef2;
+  --code-function:    #ff5d4d;
+  --code-constant:    #175ce6;
+  --code-parameter:   #4da621;
+  --code-attribute:   #c99100;
+  --code-tag:         #e24864;
+
+  /* Typography */
+  --font-family-default: "SF Pro Text", "PingFang SC", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-family-heading: "SF Pro", "PingFang SC", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-family-metric:  "Inter", "SF Pro Text", "PingFang SC", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Radius */
+  --radius-xs:  2px;
+  --radius-sm:  4px;
+  --radius-md:  6px;
+  --radius-lg:  8px;
+  --radius-xl:  10px;
+  --radius-2xl: 12px;
+  --radius-3xl: 16px;
+  --radius-full: 999px;
+
+  /* Spacing */
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 10px;
+  --sp-6: 12px;
+  --sp-8: 16px;
+  --sp-10: 20px;
+  --sp-12: 24px;
+  --sp-16: 32px;
+  --sp-20: 40px;
+  --sp-24: 48px;
+  --sp-32: 64px;
+
+  /* Shadow */
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg:  0 12px 32px rgba(23,23,23,0.12);
+  --shadow-brand: 0 8px 24px rgba(75,63,227,0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Reset & Base
+   ═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-family-default);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-default);
+  background: var(--bg-default);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+ul { list-style: none; }
+img { display: block; max-width: 100%; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--sp-12);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Nav — TraeWork 风格顶栏
+   ═══════════════════════════════════════════════════════════════ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid var(--border-l1);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-default);
+}
+.nav__brand-logo {
+  width: 20px;
+  height: 20px;
+  color: var(--brand-600);
+}
+.nav__brand-sep {
+  width: 1px;
+  height: 14px;
+  background: var(--border-l2);
+  margin: 0 var(--sp-1);
+}
+.nav__brand-sub {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.nav__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 32px;
+  padding: 0 var(--sp-6);
+  background: var(--brand-600);
+  color: var(--text-on-brand);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  transition: background .2s ease, transform .15s ease;
+}
+.nav__cta:hover { background: var(--brand-500); }
+.nav__cta:active { transform: scale(0.97); background: var(--brand-700); }
+
+/* ═══════════════════════════════════════════════════════════════
+   Hero — 代码编辑器风格 + TRAE 品牌感
+   ═══════════════════════════════════════════════════════════════ */
+.hero {
+  position: relative;
+  padding: var(--sp-32) 0 var(--sp-24);
+  background: var(--bg-default);
+  overflow: hidden;
+}
+/* TraeWork 风格浅紫渐变底 */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -100px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(closest-side, rgba(75,63,227,0.10), transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -200px;
+  left: -150px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(closest-side, rgba(149,112,255,0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.hero__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: var(--sp-24);
+  align-items: center;
+}
+
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-4);
+  background: var(--brand-50);
+  border: 1px solid var(--brand-100);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--brand-600);
+  margin-bottom: var(--sp-8);
+}
+.hero__eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand-600);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.7); }
+}
+
+.hero__title {
+  font-family: var(--font-family-heading);
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 60px;
+  letter-spacing: -0.03em;
+  color: var(--text-default);
+  margin-bottom: var(--sp-8);
+}
+.hero__title span {
+  background: linear-gradient(135deg, var(--brand-600), var(--accent-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero__subtitle {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-10);
+  max-width: 520px;
+}
+.hero__subtitle strong {
+  color: var(--text-default);
+  font-weight: 500;
+}
+
+.hero__cta-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-16);
+}
+
+/* 主按钮 — TraeWork 品牌风格 */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 40px;
+  padding: 0 var(--sp-8);
+  background: var(--brand-600);
+  color: var(--text-on-brand);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  transition: background .2s ease, box-shadow .2s ease, transform .15s ease;
+  box-shadow: 0 2px 8px rgba(75,63,227,0.2);
+}
+.btn-primary:hover {
+  background: var(--brand-500);
+  box-shadow: var(--shadow-brand);
+}
+.btn-primary:active {
+  background: var(--brand-700);
+  transform: scale(0.97);
+}
+.btn-primary svg { width: 14px; height: 14px; }
+
+/* 次按钮 */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 40px;
+  padding: 0 var(--sp-6);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-l1);
+  transition: all .2s ease;
+}
+.btn-ghost:hover {
+  background: var(--bg-secondary);
+  color: var(--text-default);
+  border-color: var(--border-l2);
+}
+
+/* Hero 统计数据 */
+.hero__stats {
+  display: flex;
+  gap: var(--sp-16);
+  padding-top: var(--sp-12);
+  border-top: 1px solid var(--border-l1);
+}
+.hero__stat-num {
+  font-family: var(--font-family-metric);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  color: var(--text-default);
+  font-variant-numeric: tabular-nums;
+}
+.hero__stat-label {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+/* ── Hero 右侧：代码编辑器卡片 ── */
+.hero__visual {
+  position: relative;
+}
+
+/* 浮动光点装饰 */
+.hero__sparkle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(0.5px);
+  pointer-events: none;
+}
+.hero__sparkle--1 {
+  width: 8px; height: 8px;
+  top: -10px; left: 10%;
+  background: var(--brand-500);
+  animation: float 4s ease-in-out infinite;
+}
+.hero__sparkle--2 {
+  width: 6px; height: 6px;
+  top: 30%; right: -8px;
+  background: var(--accent-cyan);
+  animation: float 3.5s ease-in-out infinite 0.5s;
+}
+.hero__sparkle--3 {
+  width: 10px; height: 10px;
+  bottom: -6px; left: 20%;
+  background: var(--accent-violet);
+  animation: float 5s ease-in-out infinite 1s;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); opacity: 0.8; }
+  50%      { transform: translateY(-12px); opacity: 1; }
+}
+
+/* 代码编辑器窗口 */
+.code-window {
+  background: var(--bg-default);
+  border: 1px solid var(--border-l2);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  font-family: var(--font-family-mono);
+  font-size: 13px;
+  line-height: 20px;
+}
+.code-window__header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  height: 36px;
+  padding: 0 var(--sp-4);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-l1);
+}
+.code-window__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.code-window__dot--red   { background: #ff5f57; }
+.code-window__dot--yellow{ background: #febc2e; }
+.code-window__dot--green { background: #28c840; }
+.code-window__title {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-family: var(--font-family-default);
+}
+.code-window__body {
+  padding: var(--sp-8) var(--sp-10);
+  background: var(--bg-default);
+}
+.code-line {
+  display: flex;
+  gap: var(--sp-6);
+  min-height: 20px;
+}
+.code-line__num {
+  width: 24px;
+  text-align: right;
+  color: var(--text-disabled);
+  user-select: none;
+  flex-shrink: 0;
+}
+.code-line__content {
+  flex: 1;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+/* 语法高亮色 */
+.cl-doc         { color: var(--code-doc); }
+.cl-tag         { color: var(--code-tag); }
+.cl-attr        { color: var(--code-attribute); }
+.cl-attr-val    { color: var(--code-parameter); }
+.cl-function    { color: var(--code-function); }
+.cl-constant    { color: var(--code-constant); }
+.cl-number      { color: var(--code-number); }
+.cl-action      { color: var(--code-action); }
+.cl-instruction { color: var(--code-instruction); }
+.cl-link        { color: var(--code-link); }
+.cl-default     { color: var(--code-text); }
+
+/* 光标闪烁 */
+.code-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--brand-600);
+  vertical-align: middle;
+  margin-left: 1px;
+  animation: blink 1.1s steps(1) infinite;
+  border-radius: 1px;
+}
+@keyframes blink {
+  0%, 50%  { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* TRAE 智能体小气泡 */
+.ai-bubble {
+  position: absolute;
+  bottom: -18px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4) var(--sp-3) var(--sp-3);
+  background: var(--bg-default);
+  border: 1px solid var(--border-l2);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-family-default);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.ai-bubble__logo {
+  width: 24px;
+  height: 24px;
+  background: var(--brand-600);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.ai-bubble__logo svg { width: 14px; height: 14px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   Challenges — 三张挑战卡片
+   ═══════════════════════════════════════════════════════════════ */
+.challenges {
+  padding: var(--sp-32) 0;
+  background: var(--bg-secondary);
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: var(--sp-16);
+}
+.section-head__eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--brand-600);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--sp-4);
+}
+.section-head__title {
+  font-family: var(--font-family-heading);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  color: var(--text-default);
+  margin-bottom: var(--sp-4);
+}
+.section-head__desc {
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-8);
+}
+
+.card {
+  background: var(--bg-default);
+  border: 1px solid var(--border-l1);
+  border-radius: var(--radius-2xl);
+  padding: var(--sp-12);
+  transition: all .25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--card-accent, var(--brand-600));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s ease;
+}
+.card:hover {
+  border-color: var(--border-l2);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.card:hover::before { transform: scaleX(1); }
+
+.card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-8);
+}
+.card__num {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-lg);
+  background: var(--card-accent-bg, var(--brand-50));
+  color: var(--card-accent, var(--brand-600));
+  font-family: var(--font-family-metric);
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.card__title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  color: var(--text-default);
+}
+.card__desc {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-8);
+}
+.card__features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-10);
+}
+.card__feature {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+.card__feature::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--border-l3);
+  flex-shrink: 0;
+}
+.card__feature strong {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.card__reward {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 12px;
+  color: var(--card-accent, var(--brand-600));
+  font-weight: 500;
+  margin-bottom: var(--sp-6);
+}
+.card__reward::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* 卡片按钮 */
+.card__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  width: 100%;
+  height: 36px;
+  background: var(--card-accent, var(--brand-600));
+  color: var(--text-on-brand);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  transition: background .2s ease, transform .15s ease;
+}
+.card__btn:hover { filter: brightness(1.1); }
+.card__btn:active { transform: scale(0.97); }
+
+.card--01 { --card-accent: var(--brand-600); --card-accent-bg: var(--brand-50); }
+.card--02 { --card-accent: var(--accent-teal);  --card-accent-bg: #e6faf3; }
+.card--03 { --card-accent: var(--accent-coral); --card-accent-bg: #fff0ec; }
+
+/* 次级按钮样式（第二个卡片的双按钮） */
+.card__btn-row {
+  display: flex;
+  gap: var(--sp-3);
+}
+.card__btn-secondary {
+  flex: 1;
+  height: 36px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-l1);
+  transition: all .2s ease;
+}
+.card__btn-secondary:hover {
+  background: var(--bg-secondary);
+  color: var(--text-default);
+  border-color: var(--border-l2);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Rules — 活动规则
+   ═══════════════════════════════════════════════════════════════ */
+.rules {
+  padding: var(--sp-32) 0;
+  background: var(--bg-default);
+}
+
+.rules__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-16);
+  align-items: start;
+}
+
+.rules__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+.rule-item {
+  display: flex;
+  gap: var(--sp-6);
+  padding: var(--sp-8);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--border-l1);
+}
+.rule-item__num {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  background: var(--brand-600);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.rule-item__body h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-default);
+  margin-bottom: 2px;
+}
+.rule-item__body p {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  line-height: 18px;
+}
+
+/* 抽奖入口卡片 */
+.lucky-card {
+  background: linear-gradient(135deg, var(--brand-600), var(--accent-violet));
+  border-radius: var(--radius-2xl);
+  padding: var(--sp-16);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.lucky-card::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 160px;
+  height: 160px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+.lucky-card::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -30px;
+  width: 140px;
+  height: 140px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+.lucky-card__icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.2);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--sp-8);
+  position: relative;
+  z-index: 1;
+}
+.lucky-card__icon svg { width: 24px; height: 24px; }
+.lucky-card__title {
+  font-family: var(--font-family-heading);
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: var(--sp-3);
+  position: relative;
+  z-index: 1;
+}
+.lucky-card__desc {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-bottom: var(--sp-10);
+  position: relative;
+  z-index: 1;
+  line-height: 20px;
+}
+.lucky-card__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 40px;
+  padding: 0 var(--sp-8);
+  background: white;
+  color: var(--brand-600);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  transition: transform .15s ease, box-shadow .2s ease;
+  position: relative;
+  z-index: 1;
+}
+.lucky-card__btn:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
+}
+.lucky-card__btn:active { transform: scale(0.97); }
+
+/* ═══════════════════════════════════════════════════════════════
+   Footer
+   ═══════════════════════════════════════════════════════════════ */
+.footer {
+  padding: var(--sp-16) 0 var(--sp-12);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-l1);
+}
+.footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+}
+.footer__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+.footer__brand-logo {
+  width: 16px;
+  height: 16px;
+  color: var(--brand-600);
+}
+.footer__links {
+  display: flex;
+  gap: var(--sp-8);
+  font-size: 12px;
+}
+.footer__links a {
+  color: var(--text-tertiary);
+  transition: color .2s ease;
+}
+.footer__links a:hover { color: var(--brand-600); }
+.footer__copy {
+  font-size: 12px;
+  color: var(--text-disabled);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+  .hero__grid { grid-template-columns: 1fr; gap: var(--sp-16); }
+  .hero__title { font-size: 40px; line-height: 48px; }
+  .cards { grid-template-columns: 1fr; }
+  .rules__grid { grid-template-columns: 1fr; }
+  .section-head__title { font-size: 26px; line-height: 34px; }
+}
+
+@media (max-width: 520px) {
+  .container { padding: 0 var(--sp-8); }
+  .hero { padding: var(--sp-20) 0 var(--sp-16); }
+  .hero__title { font-size: 32px; line-height: 40px; }
+  .hero__subtitle { font-size: 14px; line-height: 22px; }
+  .hero__stats { gap: var(--sp-10); flex-wrap: wrap; }
+  .hero__stat-num { font-size: 26px; line-height: 32px; }
+  .hero__cta-row { flex-wrap: wrap; }
+  .section-head__title { font-size: 22px; line-height: 30px; }
+  .challenges, .rules { padding: var(--sp-20) 0; }
+  .nav__brand-sub { display: none; }
+  .code-window { font-size: 11px; line-height: 18px; }
+  .code-window__body { padding: var(--sp-6) var(--sp-8); }
+  .footer__inner { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════ Nav ════════════════════════ -->
+<nav class="nav">
+  <div class="container nav__inner">
+    <div class="nav__brand">
+      <!-- TRAE Logo -->
+      <svg class="nav__brand-logo" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"/>
+      </svg>
+      <span>TraeDesign</span>
+      <span class="nav__brand-sep"></span>
+      <span class="nav__brand-sub">IronSpirit 活动</span>
+    </div>
+    <a href="#challenges" class="nav__cta">
+      立即挑战
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- ════════════════════════ Hero ════════════════════════ -->
+<section class="hero">
+  <div class="container hero__grid">
+    <!-- 左侧文案 -->
+    <div class="hero__text">
+      <div class="hero__eyebrow">
+        <span class="hero__eyebrow-dot"></span>
+        IronSpirit × TRAE · AI Challenge Day
+      </div>
+      <h1 class="hero__title">
+        来挑战你的<br>
+        <span>AI 认知边界</span>
+      </h1>
+      <p class="hero__subtitle">
+        铁人战队协会 × <strong>Trae 设计系统</strong>联合呈现。<br>
+        三项趣味挑战，通关即获抽奖机会，赢取限量周边。
+      </p>
+      <div class="hero__cta-row">
+        <a href="#challenges" class="btn-primary">
+          开始挑战
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#rules" class="btn-ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          活动规则
+        </a>
+      </div>
+      <div class="hero__stats">
+        <div>
+          <div class="hero__stat-num">3</div>
+          <div class="hero__stat-label">项挑战</div>
+        </div>
+        <div>
+          <div class="hero__stat-num">200</div>
+          <div class="hero__stat-label">份奖品</div>
+        </div>
+        <div>
+          <div class="hero__stat-num">100%</div>
+          <div class="hero__stat-label">中奖率</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧：代码编辑器视觉 -->
+    <div class="hero__visual">
+      <div class="hero__sparkle hero__sparkle--1"></div>
+      <div class="hero__sparkle hero__sparkle--2"></div>
+      <div class="hero__sparkle hero__sparkle--3"></div>
+
+      <div class="code-window">
+        <div class="code-window__header">
+          <span class="code-window__dot code-window__dot--red"></span>
+          <span class="code-window__dot code-window__dot--yellow"></span>
+          <span class="code-window__dot code-window__dot--green"></span>
+          <span class="code-window__title">challenge.js — TraeDesign</span>
+        </div>
+        <div class="code-window__body">
+          <div class="code-line">
+            <span class="code-line__num">1</span>
+            <span class="code-line__content"><span class="cl-doc">// 导入 Trae 挑战模块</span></span>
+          </div>
+          <div class="code-line">
+            <span class="code-line__num">2</span>
+            <span class="code-line__content"><span class="cl-instruction">import</span> <span class="cl-default">{ </span><span class="cl-function">Challenge</span><span class="cl-default">, { </span><span class="cl-function">PrizePool</span><span class="cl-default"> } } </span><span class="cl-instruction">from</span> <span class="cl-attribute-val">'@trae/challenge'</span></span>
+          </div>
+          <div class="code-line">
+            <span class="code-line__num">3</span>
+            <span class="code-line__content">&nbsp;</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line__num">4</span>
+            <span class="code-line__content"><span class="cl-instruction">const</span> <span class="cl-function">ironSpirit</span> <span class="cl-default">= </span><span class="cl-instruction">new</span> <span class="cl-action">Challenge</span><span class="cl-default">({</span></span>
+          </div>
+          <div class="code-line">
+            <span class="code-line__num">5</span>
+            <span class="code-line__content">&nbsp;&nbsp;<span class="cl-attr">name</span>: <span class="cl-attribute-val">'AI 认知边界'</span>,</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line__num">6</span>
+            <span class="code-line__content">&nbsp;&nbsp;<span class="cl-attr">rounds</span>: <span class="cl-number">3</span>,</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line__num">7</span>
+            <span class="code-line__content">&nbsp;&nbsp;<span class="cl-attr">prizes</span>: <span class="cl-number">200</span>,</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line__num">8</span>
+            <span class="code-line__content">&nbsp;&nbsp;<span class="cl-attr">poweredBy</span>: <span class="cl-attribute-val">'TraeDesign'</span></span>
+          </div>
+          <div class="code-line">
+            <span class="code-line__num">9</span>
+            <span class="code-line__content"><span class="cl-default">})</span></span>
+          </div>
+          <div class="code-line">
+            <span class="code-line__num">10</span>
+            <span class="code-line__content">&nbsp;</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line__num">11</span>
+            <span class="code-line__content"><span class="cl-doc">// 准备好接受挑战了吗？</span><span class="code-cursor"></span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI 气泡 -->
+      <div class="ai-bubble">
+        <div class="ai-bubble__logo">
+          <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"/>
+          </svg>
+        </div>
+        <span>由 TRAE 智能体生成</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ Challenges ════════════════════════ -->
+<section class="challenges" id="challenges">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__eyebrow">Three Challenges</div>
+      <h2 class="section-head__title">选择你的挑战</h2>
+      <p class="section-head__desc">完成任意一项即可获得抽奖机会，叠加挑战可累计次数</p>
+    </div>
+
+    <div class="cards">
+      <!-- 卡片 01 -->
+      <div class="card card--01">
+        <div class="card__header">
+          <div class="card__num">01</div>
+          <div class="card__title">国产 AI 圈梗快问快答</div>
+        </div>
+        <p class="card__desc">五秒一题，看看你对国产 AI 社区的梗了解多少。</p>
+        <ul class="card__features">
+          <li class="card__feature">每题 5 秒限时，手速决定一切</li>
+          <li class="card__feature">连续答对 5 题即可通关</li>
+        </ul>
+        <div class="card__reward">通关奖励：1 次抽奖机会</div>
+        <a href="quiz.html" class="card__btn">
+          开始挑战
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <!-- 卡片 02 -->
+      <div class="card card--02">
+        <div class="card__header">
+          <div class="card__num">02</div>
+          <div class="card__title">图片真假挑战</div>
+        </div>
+        <p class="card__desc">你能分辨出哪些是真实照片，哪些是 AI 生成的吗？</p>
+        <ul class="card__features">
+          <li class="card__feature">判断每张图片是「真人」还是「AI」</li>
+          <li class="card__feature">两个难度等级，奖励翻倍</li>
+        </ul>
+        <div class="card__reward">简易版：1 次 · 困难版：2 次</div>
+        <div class="card__btn-row">
+          <button class="card__btn-secondary">简易版</button>
+          <button class="card__btn" style="background: var(--card-accent)">困难版</button>
+        </div>
+      </div>
+
+      <!-- 卡片 03 -->
+      <div class="card card--03">
+        <div class="card__header">
+          <div class="card__num">03</div>
+          <div class="card__title">AI 知识问答</div>
+        </div>
+        <p class="card__desc">检验你的 AI 基础知识储备，从模型原理到行业常识。</p>
+        <ul class="card__features">
+          <li class="card__feature">共 10 道题，覆盖 AI 全领域</li>
+          <li class="card__feature">答对 6 题及格，全对有惊喜</li>
+        </ul>
+        <div class="card__reward">≥6 题：1 次 · 全对：2 次</div>
+        <a href="#" class="card__btn">
+          开始答题
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ Rules ════════════════════════ -->
+<section class="rules" id="rules">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__eyebrow">How it works</div>
+      <h2 class="section-head__title">活动规则</h2>
+      <p class="section-head__desc">简单三步，开启挑战之旅</p>
+    </div>
+
+    <div class="rules__grid">
+      <!-- 规则列表 -->
+      <div class="rules__list">
+        <div class="rule-item">
+          <div class="rule-item__num">1</div>
+          <div class="rule-item__body">
+            <h4>现场参与挑战</h4>
+            <p>在活动区域选择任意一项挑战，向工作人员出示即可开始。</p>
+          </div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-item__num">2</div>
+          <div class="rule-item__body">
+            <h4>通关获得抽奖资格</h4>
+            <p>达成通关条件后，由工作人员核验，发放对应抽奖次数。</p>
+          </div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-item__num">3</div>
+          <div class="rule-item__body">
+            <h4>转动转盘赢大奖</h4>
+            <p>前往抽奖区，使用获得的抽奖次数转动转盘，赢取限量周边。</p>
+          </div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-item__num">!</div>
+          <div class="rule-item__body">
+            <h4>注意事项</h4>
+            <p>奖池共 200 份，先到先得，抽完即止。每人每天最多参与 3 次挑战。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 抽奖入口卡片 -->
+      <div class="lucky-card">
+        <div class="lucky-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="lucky-card__title">幸运大转盘</div>
+        <div class="lucky-card__desc">已获取抽奖次数？<br>立即转动转盘，赢取 TraeWork 限量周边。</div>
+        <a href="lucky-wheel.html" class="lucky-card__btn">
+          去抽奖
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ Footer ════════════════════════ -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <svg class="footer__brand-logo" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14.7992 12.6749H3.14192V10.8059H1.19922V3.3255H14.7992V12.6749ZM3.14192 10.8059H12.8565V5.19535H3.14192V10.8059ZM7.99968 7.97209L6.62597 9.2942L5.25235 7.97209L6.62597 6.64989L7.99968 7.97209ZM11.8852 7.97128L10.5115 9.29339L9.13783 7.97128L10.5115 6.64909L11.8852 7.97128Z"/>
+      </svg>
+      <span>Powered by TraeWork Design System</span>
+    </div>
+    <div class="footer__links">
+      <a href="#">关于铁人战队</a>
+      <a href="#">TraeWork</a>
+      <a href="#">联系我们</a>
+    </div>
+    <div class="footer__copy">© 2026 IronSpirit × TRAE. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
