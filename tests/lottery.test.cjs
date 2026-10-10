@@ -17,12 +17,11 @@ function setup(t){
   return {get store(){return store;},directory,reopen(){store.close();store=new LotteryStore(path.join(directory,'lottery.sqlite'));return store;}};
 }
 function request(store,key=randomUUID()){return {requestId:key,campaignId:store.active().id};}
-test('文档奖池 200 签、58 实物，两种手办和等级分别准确',t=>{
+test('文档奖池 200 签、58 实物，TRAE宝手办合并后共 5 份',t=>{
   const {store}=setup(t),s=store.state();
   assert.equal(s.total,200);assert.equal(s.remaining,200);assert.equal(s.winRate,.29);
-  assert.deepEqual(Object.fromEntries(['特等奖','一等奖','二等奖','三等奖'].map(level=>[level,s.prizes.filter(p=>p.level===level).reduce((sum,p)=>sum+p.count,0)])),{'特等奖':2,'一等奖':16,'二等奖':15,'三等奖':25});
-  assert.equal(s.prizes.find(p=>p.id==='new-figurine').count,1);
-  assert.equal(s.prizes.find(p=>p.id==='trae-figurine').count,4);
+  assert.deepEqual(Object.fromEntries(['特等奖','一等奖','二等奖','三等奖'].map(level=>[level,s.prizes.filter(p=>p.level===level).reduce((sum,p)=>sum+p.count,0)])),{'特等奖':2,'一等奖':15,'二等奖':16,'三等奖':25});
+  assert.equal(s.prizes.find(p=>p.id==='trae-figurine').count,5);
 });
 test('抽满 200 次恰好发出各品类库存，201 次失败，无额外签',t=>{
   const {store}=setup(t),counts={};
