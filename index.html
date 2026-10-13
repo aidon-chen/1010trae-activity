@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陈昱臻 · 活动与项目</title>
+<meta name="description" content="个人展示页：活动与项目图片集。">
+<style>
+  :root {
+    --bg: #0e1114;
+    --bg-soft: #151a1e;
+    --border: #232a30;
+    --text: #d6dce2;
+    --text-dim: #8a939c;
+    --accent: #d4a373;
+    --accent-dim: rgba(212, 163, 115, 0.12);
+    --font-mono: "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --font-sans: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    --max-w: 960px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition: none !important; }
+  }
+
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: var(--font-sans); font-size: 16px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  ::selection { background: var(--accent); color: var(--bg); }
+  .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- 导航 ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(14, 17, 20, 0.85); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .logo { font-family: var(--font-mono); font-size: 14px; color: var(--text); }
+  .logo span { color: var(--accent); }
+  nav ul { display: flex; gap: 24px; list-style: none; }
+  nav ul a { font-family: var(--font-mono); font-size: 13px; color: var(--text-dim); }
+  nav ul a:hover { color: var(--accent); text-decoration: none; }
+
+  /* ---------- Hero：极简 ---------- */
+  .hero { padding: 72px 0 64px; }
+  .hero .wrap { display: flex; align-items: center; gap: 40px; }
+  .hero .intro { flex: 1; }
+  .hero h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 700; }
+  .hero .intro p { margin-top: 12px; color: var(--text-dim); max-width: 560px; }
+  .hero .avatar {
+    width: 150px; height: 150px; flex-shrink: 0;
+    border-radius: 50%; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  /* 框固定不动，内部图片放大以聚焦人脸 */
+  .hero .avatar img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  @media (max-width: 640px) {
+    .hero .wrap { flex-direction: column-reverse; align-items: flex-start; gap: 24px; }
+    .hero .avatar { width: 130px; height: 130px; }
+  }
+
+  /* ---------- 区块标题 ---------- */
+  section { padding: 40px 0 0; }
+  h2 {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 19px; font-weight: 600; margin-bottom: 28px;
+  }
+  h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+  h2 .no { font-family: var(--font-mono); font-size: 14px; color: var(--accent); font-weight: 400; }
+
+  /* ---------- 卡片网格：图片 + 常驻文字描述 ---------- */
+  .gallery {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  @media (max-width: 800px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .gallery { grid-template-columns: 1fr; } }
+
+  figure {
+    border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--border); background: var(--bg-soft);
+    cursor: zoom-in; display: flex; flex-direction: column;
+    transition: transform .2s, border-color .2s;
+  }
+  figure:hover { transform: translateY(-3px); border-color: var(--accent); }
+  figure img {
+    display: block; width: 100%; aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  figure .info { padding: 14px 16px 16px; }
+  figure .info h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  figure .info p { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+  figure .info p a { font-size: 12.5px; }
+  figure .tags { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  figure .tags span {
+    font-family: var(--font-mono); font-size: 11px; color: var(--accent);
+    background: var(--accent-dim); border-radius: 4px; padding: 2px 8px;
+  }
+
+  /* ---------- 个人信息 ---------- */
+  .profile dl { display: grid; grid-template-columns: 96px 1fr; row-gap: 10px; column-gap: 24px; }
+  .profile dt { font-family: var(--font-mono); font-size: 13px; color: var(--accent); padding-top: 2px; }
+  .profile dd { grid-column: 2; font-size: 15px; }
+  .profile dd .meta { margin-left: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); }
+  @media (max-width: 520px) {
+    .profile dl { grid-template-columns: 1fr; row-gap: 2px; }
+    .profile dd { grid-column: 1; margin-bottom: 10px; }
+  }
+
+  /* ---------- 项目：折叠的次要分组 ---------- */
+  .others { margin-top: 28px; }
+  .others summary {
+    cursor: pointer; font-size: 14px; font-weight: 500;
+    color: var(--text-dim); letter-spacing: .05em;
+    padding: 8px 0; user-select: none;
+  }
+  .others summary:hover { color: var(--accent); }
+  .others[open] summary { margin-bottom: 16px; }
+  .gallery.secondary { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .gallery.secondary figure .info { padding: 10px 12px 12px; }
+  .gallery.secondary figure .info h3 { font-size: 13.5px; }
+  .gallery.secondary figure .info p { font-size: 12px; }
+  @media (max-width: 800px) { .gallery.secondary { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .gallery.secondary { grid-template-columns: 1fr; } }
+
+  /* ---------- TRAE 使用记录 ---------- */
+  .trae-shot {
+    border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .trae-shot img { display: block; width: 100%; height: auto; aspect-ratio: auto; object-fit: contain; }
+
+  /* ---------- 摄影报道列表 ---------- */
+  .press { display: flex; flex-direction: column; }
+  .press-year {
+    font-family: var(--font-mono); font-size: 13px; color: var(--accent);
+    margin: 28px 0 4px;
+  }
+  .press-year:first-child { margin-top: 0; }
+  .press-item {
+    display: flex; gap: 16px; padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .press-item .date {
+    font-family: var(--font-mono); font-size: 13px; color: var(--text-dim);
+    white-space: nowrap; padding-top: 2px;
+  }
+  .press-item .title { flex: 1; font-size: 15px; font-weight: 600; color: var(--text); }
+  .press-item .title a { color: var(--text); font-size: 15px; }
+  .press-item .title a:hover { color: var(--accent); }
+  .press-item .sub { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; margin-top: 4px; }
+  .press-item .tags { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* 其他项目：无图文字卡片网格 */
+  .press.projects {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    padding-top: 4px;
+  }
+  .press.projects .press-item {
+    display: block; padding: 14px 16px;
+    border: 1px solid var(--border); border-radius: 10px;
+  }
+  .press.projects .press-item .title { font-size: 14.5px; }
+  @media (max-width: 800px) { .press.projects { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .press.projects { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) {
+    .press-item { flex-direction: column; gap: 2px; }
+  }
+
+  /* ---------- 灯箱 ---------- */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 50;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(0, 0, 0, 0.85); padding: 24px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 78vh; border-radius: 8px; }
+  .lightbox .cap {
+    position: absolute; bottom: 28px; left: 0; right: 0;
+    text-align: center; font-size: 14px; color: var(--text-dim);
+  }
+  .lightbox .close {
+    position: absolute; top: 18px; right: 24px;
+    font-family: var(--font-mono); font-size: 26px;
+    color: var(--text-dim); cursor: pointer; background: none; border: none;
+  }
+  .lightbox .close:hover { color: var(--accent); }
+
+  footer { border-top: 1px solid var(--border); margin-top: 72px; padding: 24px 0; }
+  footer .wrap {
+    font-family: var(--font-mono); font-size: 12px; color: var(--text-dim);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top">cyz<span>.dev</span></a>
+    <ul>
+      <li><a href="#about">简介</a></li>
+      <li><a href="#projects">项目</a></li>
+      <li><a href="#activities">摄影</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="top">
+
+  <!-- Hero：头像 + 姓名 + 个人简介（来自简历） -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="intro">
+        <h1>陈昱臻</h1>
+        <p>对 AI 编程工具与开发者生态有浓厚兴趣，日常深度使用 TRAE 进行开发与学习。具备较强的校园社区组织能力，希望通过校园大使身份，让更多同学体验 AI 编程带来的效率提升。这里收录我参与拍摄的新闻报道与个人项目。</p>
+      </div>
+      <div class="avatar"><img src="avatar.png" alt="陈昱臻个人照片"></div>
+    </div>
+  </header>
+
+  <!-- ============ 个人信息 ============ -->
+  <section id="about">
+    <div class="wrap">
+      <h2><span class="no">00.</span>个人信息</h2>
+      <div class="profile">
+        <dl>
+          <dt>教育背景</dt>
+          <dd>西南石油大学 · 地理信息科学（本科）<span class="meta">2024.09 – 2028.06</span></dd>
+          <dt>学生职务</dt>
+          <dd>党委宣传部大学生全媒体中心主任<span class="meta">2026.09 至今 · 参与校级活动拍摄百余次</span></dd>
+          <dt>技能</dt>
+          <dd>AI 开发（精通）· 摄影（精通）· 活动组织（熟练）</dd>
+          <dt>荣誉</dt>
+          <dd>traeAI 创造力大赛 Top<span class="meta">2026.07</span></dd>
+          <dt>联系</dt>
+          <dd><a href="tel:15111979886">15111979886</a> · <a href="mailto:aidon_chen@163.com">aidon_chen@163.com</a></dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRAE 使用记录 ============ -->
+  <section id="trae">
+    <div class="wrap">
+      <h2><span class="no">00.5</span>TRAE 使用记录</h2>
+      <figure class="trae-shot">
+        <img src="trae-stats.png" alt="TRAE 使用记录：484 天活跃、近期对话 163 次、最佳搭档 @Agent 配合 149 次、模型调用偏好">
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 项目图集 ============ -->
+  <section id="projects">
+    <div class="wrap">
+      <h2><span class="no">01.</span>项目 <em style="font-style:normal;font-size:13px;color:var(--text-dim);font-weight:400;">（核心项目）</em></h2>
+      <div class="gallery">
+        <figure tabindex="0">
+          <img src="proj-aidoc.png" alt="AI 文档管理平台界面截图">
+          <div class="info">
+            <h3>AI 文档管理平台</h3>
+            <p>核心开发者。三段式 RAG 检索（BM 粗筛 → 向量召回 → 混合重排）、6 个微服务 + JWT 统一认证、SSE 流式对话与来源引用、Vue 3 管理后台（角色权限 / 操作日志审计），Docker Compose 部署。</p>
+            <div class="tags"><span>核心项目</span><span>Flask</span><span>Vue 3</span><span>MongoDB</span><span>RAG</span></div>
+          </div>
+        </figure>
+        <!-- TODO: 替换 src 为真实项目截图/照片 -->
+        <figure tabindex="0">
+          <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=smartphone%20in%20hand%20showing%20a%20clean%20WeChat%20mini%20program%20task%20list%20interface%2C%20photo%20assignment%20management%20app%2C%20minimal%20background%2C%20product%20photo&image_size=landscape_4_3" alt="任务派发小程序截图">
+          <div class="info">
+            <h3>视觉中心任务派发小程序</h3>
+            <p>为西南石油大学党委宣传部视觉中心开发的微信小程序，实现摄影任务的发布、认领与协作管理，提升百余人团队的派单效率。采用 Trunk-based 工作流与 main 分支保护。</p>
+            <div class="tags"><span>学校项目</span><span>微信小程序</span><span>JavaScript</span></div>
+          </div>
+        </figure>
+        <figure tabindex="0">
+          <img src="proj-trae1010.png" alt="1010 Trae 活动页面截图">
+          <div class="info">
+            <h3>1010 Trae 活动页面</h3>
+            <p>为 Trae 联动铁人战队线下活动设计的互动专题页，实现 AI 答题挑战、现场抽奖等核心功能，支撑百团大战全流程互动；同时负责活动整体策划与现场组织，活动后完成复盘并沉淀可复用模板。</p>
+            <div class="tags"><span>商用项目</span><span>HTML</span><span>JavaScript</span></div>
+          </div>
+        </figure>
+      </div>
+      <details class="others">
+        <summary>其他项目（点击展开）</summary>
+        <div class="press projects">
+          <div class="press-item">
+            <p class="title">律复 LüFu — AI 古谱复现引擎</p>
+            <p class="sub">利用 AI 将中国传统古谱转化为可演奏的数字乐谱，让古乐焕发新生。TRAE AI 创造力大赛参赛作品（Top 名次）。</p>
+            <div class="tags"><span>竞赛项目</span><span>AI</span><span>JavaScript</span></div>
+          </div>
+          <div class="press-item">
+            <p class="title">chaoxing-downloader</p>
+            <p class="sub">学习通（超星）课程 PDF 资料自动下载器，一键批量下载课程文件，免去逐个保存的繁琐，已开源发布。</p>
+            <div class="tags"><span>开源工具</span><span>JavaScript</span></div>
+          </div>
+          <div class="press-item">
+            <p class="title">个人博客</p>
+            <p class="sub">基于 Hexo 与 Butterfly 主题搭建的个人博客，记录学习笔记与生活随笔，部署于 GitHub Pages。</p>
+            <div class="tags"><span>Hexo</span><span>博客</span></div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ 摄影报道 ============ -->
+  <section id="activities">
+    <div class="wrap">
+      <h2><span class="no">02.</span>摄影报道 <em style="font-style:normal;font-size:13px;color:var(--text-dim);font-weight:400;">（26 篇校园新闻图片报道 · 重点活动展示）</em></h2>
+      <div class="gallery">
+        <figure tabindex="0">
+          <img src="press1.png" alt="高校办公室工作创新联盟成立大会现场照片">
+          <div class="info">
+            <h3>高校办公室工作创新联盟成立大会在我校举行</h3>
+            <p>2026.01.10 · <a href="https://www.swpu.edu.cn/news/info/2511/29300.htm" target="_blank" rel="noopener">阅读原文</a></p>
+          </div>
+        </figure>
+        <figure tabindex="0">
+          <img src="press2.jpg" alt="乌兹别克斯坦培训班结业典礼现场照片">
+          <div class="info">
+            <h3>乌兹别克斯坦高级公务员培训班结业典礼在我校举行</h3>
+            <p>2025.11.28 · <a href="https://www.swpu.edu.cn/news/info/2511/25850.htm" target="_blank" rel="noopener">阅读原文</a></p>
+          </div>
+        </figure>
+        <figure tabindex="0">
+          <img src="press3.jpg" alt="军训汇演现场照片">
+          <div class="info">
+            <h3>军训收官！2026级新生晒出大学第一份“成绩单”</h3>
+            <p>2026.09.30 · <a href="https://www.swpu.edu.cn/news/info/2511/43080.htm" target="_blank" rel="noopener">阅读原文</a></p>
+          </div>
+        </figure>
+        <figure tabindex="0">
+          <img src="press4.jpg" alt="新生开学典礼现场照片">
+          <div class="info">
+            <h3>西南石油大学隆重举行2025级新生开学典礼</h3>
+            <p>2025.09.12 · <a href="https://www.swpu.edu.cn/news/info/2511/19800.htm" target="_blank" rel="noopener">阅读原文</a></p>
+          </div>
+        </figure>
+        <figure tabindex="0">
+          <img src="press5.jpg" alt="高招咨询会现场照片">
+          <div class="info">
+            <h3>四川省普通高校招生现场咨询会举行 600余所高校齐聚我校</h3>
+            <p>2026.06.26 · <a href="https://www.swpu.edu.cn/news/info/2511/38270.htm" target="_blank" rel="noopener">阅读原文</a></p>
+          </div>
+        </figure>
+        <figure tabindex="0">
+          <img src="press6.jpg" alt="毕业生晚会现场照片">
+          <div class="info">
+            <h3>【毕业季】2026届毕业生晚会温情上演 两校区同唱青春骊歌</h3>
+            <p>2026.06.17 · <a href="https://www.swpu.edu.cn/news/info/2511/37850.htm" target="_blank" rel="noopener">阅读原文</a></p>
+          </div>
+        </figure>
+      </div>
+      <details class="others">
+        <summary>其余报道（点击展开）</summary>
+        <div class="press">
+
+        <p class="press-year">2026</p>
+        <div class="press-item">
+          <span class="date">09.04</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/41560.htm" target="_blank" rel="noopener">【迎新季】他们来了！万余名新石大人亮相校园</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">08.31</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/41340.htm" target="_blank" rel="noopener">【开学首日】我们不说开学，我们说——</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">06.17</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/37700.htm" target="_blank" rel="noopener">张烈辉讲授树立和践行正确政绩观学习教育专题党课</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">06.12</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/37470.htm" target="_blank" rel="noopener">千名师生在奔跑中传承红色精神</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">05.24</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/36460.htm" target="_blank" rel="noopener">第十六届中国石油工程设计大赛在我校举办</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">05.18</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/35750.htm" target="_blank" rel="noopener">西安石油大学校长王进喜访校</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">04.15</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/33690.htm" target="_blank" rel="noopener">测绘工程专业接受中国工程教育认证现场考查</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">03.27</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/32630.htm" target="_blank" rel="noopener">【双代会】锚定“双一流” 奋进“十五五” 学校召开第九届教代会暨第十三届工代会第二次会议</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">03.18</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2512/31990.htm" target="_blank" rel="noopener">四川天府新区科学技术局来访</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">03.10</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/31640.htm" target="_blank" rel="noopener">泉州市洛江区区长郭宁来校调研</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">03.03</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/31260.htm" target="_blank" rel="noopener">【新学期 新气象】元宵节遇上开学季 中外学生共品“文化大餐”</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">03.02</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/31060.htm" target="_blank" rel="noopener">【新学期 新气象】奋斗实干开新局 骏马扬蹄启新篇</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">01.10</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/29300.htm" target="_blank" rel="noopener">高校办公室工作创新联盟成立大会在我校举行</a></p>
+        </div>
+
+        <p class="press-year">2025</p>
+        <div class="press-item">
+          <span class="date">12.16</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/27820.htm" target="_blank" rel="noopener">金阳县委书记刘尧平率党政学习考察团访校</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">11.28</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/25900.htm" target="_blank" rel="noopener">迎新氛围满满！这场晚会汇聚青春风采……</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">11.17</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/24650.htm" target="_blank" rel="noopener">【讲赛践练】我校原创话剧《时代铁人陈建军》成功首演</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">09.23</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2572/20910.htm" target="_blank" rel="noopener">油海丹心四十载 春华秋实报师恩 采油81级举行毕业40周年同学聚会</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">09.06</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/19370.htm" target="_blank" rel="noopener">【迎新季】从校门到心门 “一站式”迎新获好评</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">09.05</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/19290.htm" target="_blank" rel="noopener">【迎新季】远方新生首日报到“雨”你共赴石大之约</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">09.03</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/19220.htm" target="_blank" rel="noopener">石大师生热议九三阅兵：提气！自豪！</a></p>
+        </div>
+        <div class="press-item">
+          <span class="date">09.01</span>
+          <p class="title"><a href="https://www.swpu.edu.cn/news/info/2511/18730.htm" target="_blank" rel="noopener">【新学期 新气象】石“达”新程 新学期邂逅无限可能</a></p>
+        </div>
+
+        </div>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year"></span> 陈昱臻</span>
+    <span>Hosted on GitHub Pages</span>
+  </div>
+</footer>
+
+<!-- 灯箱：点击图片放大预览 -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <button class="close" aria-label="关闭预览">×</button>
+  <img src="" alt="">
+  <p class="cap"></p>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // 灯箱逻辑：点击卡片放大图片，点背景或 × 关闭
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = lightbox.querySelector('img');
+  const lbCap = lightbox.querySelector('.cap');
+
+  document.querySelectorAll('.gallery figure').forEach(fig => {
+    fig.addEventListener('click', () => {
+      const img = fig.querySelector('img');
+      const info = fig.querySelector('.info');
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      // 灯箱底部显示卡片标题 + 描述
+      lbCap.textContent = info ? info.querySelector('h3').textContent : '';
+      lightbox.classList.add('open');
+    });
+  });
+
+  // 卡片内「阅读原文」链接点击时跳转，不触发光箱
+  document.querySelectorAll('.gallery figure a').forEach(a => {
+    a.addEventListener('click', e => e.stopPropagation());
+  });
+
+  function closeLightbox() { lightbox.classList.remove('open'); }
+  lightbox.addEventListener('click', e => {
+    if (e.target === lightbox || e.target.classList.contains('close')) closeLightbox();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+
+</body>
+</html>
